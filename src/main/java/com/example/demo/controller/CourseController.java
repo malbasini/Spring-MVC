@@ -260,34 +260,34 @@ public class CourseController {
         model.addAttribute("course", course);
         return "courses/edit"; // JSP da mostrare
     }
-// POST /courses/{id} -> aggiorna un corso esistente
-@PostMapping("/{id}")
-public String updateCourse(@PathVariable("id") Integer id,
-                           @ModelAttribute("course") @Valid Course updatedCourse,
-                           BindingResult bindingResult, Model model) {
-    if (bindingResult.hasErrors()) {
-        return "courses/edit"; // JSP da mostrare
-    }
-    String imagePath = courseService.findById(id).getImagePath();
-    // Validazioni
-    String message = validazioni(updatedCourse,model);
-    if(message != null) {
-        model.addAttribute("message", message);
-        updatedCourse.setCurrentPriceCurrency("EUR");
-        updatedCourse.setFullPriceCurrency("EUR");
-        updatedCourse.setImagePath(imagePath);
-        return "courses/edit";
-    }
-     // Assicuriamoci che l'ID coincida
-    updatedCourse.setId(id);
-    try{
-        courseService.updateCourse(updatedCourse);
-        model.addAttribute("message", "Course updated successfully");
-    } catch (Exception e) {
-        model.addAttribute("message", e.getMessage());
-        return "courses/edit"; // JSP da mostrare
-    }
-    return "redirect:/courses";
+    // POST /courses/{id} -> aggiorna un corso esistente
+    @PostMapping("/{id}")
+    public String updateCourse(@PathVariable("id") Integer id,
+                               @ModelAttribute("course") @Valid Course updatedCourse,
+                               BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "courses/edit"; // JSP da mostrare
+        }
+        String imagePath = courseService.findById(id).getImagePath();
+        // Validazioni
+        String message = validazioni(updatedCourse,model);
+        if(message != null) {
+            model.addAttribute("message", message);
+            updatedCourse.setCurrentPriceCurrency("EUR");
+            updatedCourse.setFullPriceCurrency("EUR");
+            updatedCourse.setImagePath(imagePath);
+            return "courses/edit";
+        }
+         // Assicuriamoci che l'ID coincida
+        updatedCourse.setId(id);
+        try{
+            courseService.updateCourse(updatedCourse);
+            model.addAttribute("message", "Course updated successfully");
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            return "courses/edit"; // JSP da mostrare
+        }
+        return "redirect:/courses";
 }
     // POST /courses/{id}/delete -> cancella un corso
     @PostMapping("/{id}/delete")
@@ -295,6 +295,7 @@ public String updateCourse(@PathVariable("id") Integer id,
         courseService.deleteCourse(id);
         return "redirect:/courses";
     }
+    // Calcola la durata totale di una lista di lezioni
     private Duration calculateTotalDuration(List<Lesson> lessons) {
         return lessons.stream()
                 .map(lesson -> Duration.between(LocalTime.MIN, LocalTime.parse(lesson.getDuration())))

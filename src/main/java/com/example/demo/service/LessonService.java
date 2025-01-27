@@ -147,4 +147,9 @@ public interface LessonService {
     Lesson findById(Integer id);
     Lesson save(Lesson lesson);
     void deleteById(Integer id);
+    void saveLesson(String title, int courseId);
+    Lesson findByTitleAndCourseId(String title, int courseId);
+    void updateLesson(Lesson lesson);
+    void deleteLesson(int id);
+
 }

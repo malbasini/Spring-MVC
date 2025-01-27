@@ -1,5 +1,4 @@
 package com.example.demo.entity;
-import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -74,6 +73,7 @@ In sintesi, la classe `Lesson` è un modello che mappa la struttura dei dati del
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, name = "Id")
     private Integer id;
 
     @Column(nullable = false, length = 450)
@@ -89,13 +89,6 @@ public class Lesson {
     @JoinColumn(name = "CourseId", nullable = false)
     private Course course;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -149,5 +142,13 @@ public class Lesson {
         } catch (DateTimeParseException e) {
             return duration; // Restituisce il valore originale se non è valido
         }
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

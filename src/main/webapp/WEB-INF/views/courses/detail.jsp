@@ -8,11 +8,7 @@
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<script>
-    $('#voteModal').on('shown.bs.modal', function(event) {
-        $(this).find('iframe').attr('src', event.relatedTarget.href);
-    });
-</script>
+<br>
 <section class="course-info">
     <div class="row">
         <div class="col-md-9">
@@ -64,18 +60,19 @@
 </section>
 <section class="course-lessons">
     <h2>Lezioni</h2>
-    <a class ="btn btn-outline-primary btn-sm"><i class ="fas fa-plus" ></i > Crea nuova </a>
+    <a class ="btn btn-outline-primary btn-sm" href="${pageContext.request.contextPath}/lessons/new/${course.id}"><i class ="fas fa-plus" ></i > Crea nuova </a>
     <c:forEach var="lesson" items="${course.lessons}">
         <hr />
     <div class="row">
         <div class="col-md-3 d-flex align-items-center">
-            <span>${lesson.title}</span>
+            <a href="${pageContext.request.contextPath}/lessons/${lesson.id}/detail">${lesson.title}</a>
         </div>
         <div class="col-md-7 d-flex align-items-center">
             <span>${lesson.description}</span>
         </div>
         <div class="col-md-2 d-flex align-items-center justify-content-end lesson-duration">
             <i class="far fa-clock"></i><time>${lesson.duration}</time>
+            <a class="btn btn-outline-primary btn-sm ml-3" href="${pageContext.request.contextPath}/lessons/${lesson.id}/edit"><i class="fas fa-pencil-alt"></i></a>
         </div>
     </div>
     </c:forEach>

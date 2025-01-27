@@ -111,4 +111,6 @@ dei dati a Spring Data JPA senza bisogno di scrivere query SQL manuali.*/
 public interface LessonRepository extends JpaRepository<Lesson, Integer> {
     // Esempio: recupera tutte le lessons di un certo courseId
     List<Lesson> findByCourseId(Integer courseId);
+    boolean existsByTitleAndCourseId(String title,int courseId);
+    Lesson findByTitleAndCourseId(String title,int courseId);
 }

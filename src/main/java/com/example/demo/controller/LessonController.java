@@ -196,67 +196,119 @@ public class LessonController {
         return "lessons/list";
     }
     // GET /lessons/new?courseId=... -> mostra form per creare una lezione
-    @GetMapping("/new")
-    public String showCreateForm(@RequestParam("courseId") Integer courseId, Model
+    @GetMapping("/new/{courseId}")
+    public String showCreateForm(@PathVariable("courseId") Integer courseId, Model
             model) {
         Lesson lesson = new Lesson();
-// Impostiamo il corso nella lesson
+        // Impostiamo il corso nella lesson
         Course course = courseService.findById(courseId);
         lesson.setCourse(course);
         model.addAttribute("lesson", lesson);
         model.addAttribute("courseId", courseId);
-        return "lessons/form";
+        return "lessons/create";
     }
     // POST /lessons -> creazione (salvataggio) della lezione
     @PostMapping
     public String createLesson(@ModelAttribute("lesson") Lesson lesson,
-                               @RequestParam("courseId") Integer courseId) {
-// Associa la lezione al corso
+                               @RequestParam("courseId") Integer courseId,
+                               Model model) {
+        // Associa la lezione al corso
         Course course = courseService.findById(courseId);
+        model.addAttribute("courseId", courseId);
         lesson.setCourse(course);
-        lessonService.save(lesson);
-        return "redirect:/lessons/course/" + courseId;
+        try {
+            lessonService.saveLesson(lesson.getTitle(),courseId);
+        }
+        catch (RuntimeException ex){
+            model.addAttribute("message", ex.getMessage());
+            return "lessons/create";
+        }
+        catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            return "lessons/create"; // JSP da mostrare
+        }
+        Lesson l = lessonService.findByTitleAndCourseId(lesson.getTitle(), courseId);
+        model.addAttribute("lesson", l);
+        return "/lessons/edit";
     }
-// GET /lessons/{id}/edit -> mostra form di modifica
-@GetMapping("/{id}/edit")
-public String editLesson(@PathVariable("id") Integer id, Model model) {
-    Lesson lesson = lessonService.findById(id);
-    if (lesson == null) {
-// gestisci errore se non trovato
-        return "redirect:/courses";
+    // GET /lessons/{id}/edit -> mostra form di modifica
+    @GetMapping("/{id}/edit")
+    public String editLesson(@PathVariable("id") Integer id, Model model) {
+        Lesson lesson = lessonService.findById(id);
+        if (lesson == null) {
+            // gestisci errore se non trovato
+            return "lesson/edit";
+        }
+        model.addAttribute("lesson", lesson);
+        return "lessons/edit";
     }
-    model.addAttribute("lesson", lesson);
-    return "lessons/form";
-}
-// POST /lessons/{id} -> aggiornamento
-@PostMapping("/{id}")
-public String updateLesson(@PathVariable("id") Integer id,
-                           @ModelAttribute("lesson") Lesson updatedLesson) {
-// Manteniamo l'ID
-    Lesson existing = lessonService.findById(id);
-    if (existing == null) {
-// gestisci errore se non trovato
-        return "redirect:/courses";
+        // POST /lessons/{id} -> aggiornamento
+    @PostMapping("/{id}/{courseId}")
+    public String updateLesson(@PathVariable("id") Integer id,
+                               @PathVariable("courseId") Integer courseId,
+                               @ModelAttribute("lesson") Lesson updatedLesson,
+                               Model model) {
+        // Manteniamo l'ID
+        Lesson existing = lessonService.findById(id);
+        Course course = courseService.findById(courseId);
+        model.addAttribute("courseId", courseId);
+        updatedLesson.setCourse(course);
+        String message = this.validazioni(updatedLesson);
+        if(message != null){
+            model.addAttribute("message", message);
+            return "lessons/edit";
+        }
+        if (existing == null) {
+            // gestisci errore se non trovato
+            return "redirect:/courses";
+        } else {
+            // Copia i campi
+            existing.setTitle(updatedLesson.getTitle());
+            existing.setDescription(updatedLesson.getDescription());
+            existing.setDuration(updatedLesson.getDuration());
+            // Non dimenticare di reimpostare il course!
+            existing.setCourse(updatedLesson.getCourse());
+            lessonService.updateLesson(existing);
+            return "redirect:/courses";
+        }
     }
-// Copia i campi
-    existing.setTitle(updatedLesson.getTitle());
-    existing.setDescription(updatedLesson.getDescription());
-    existing.setDuration(updatedLesson.getDuration());
-    //existing.setOrder(updatedLesson.getOrder());
-// Non dimenticare di reimpostare il course!
-    existing.setCourse(updatedLesson.getCourse());
-    lessonService.save(existing);
-    return "redirect:/lessons/course/" + existing.getCourse().getId();
-}
-// POST /lessons/{id}/delete -> cancellazione
-@PostMapping("/{id}/delete")
-public String deleteLesson(@PathVariable("id") Integer id) {
-    Lesson lesson = lessonService.findById(id);
-    if (lesson != null) {
-        Integer courseId = lesson.getCourse().getId();
-        lessonService.deleteById(id);
-        return "redirect:/lessons/course/" + courseId;
+        // POST /lessons/{id}/delete -> cancellazione
+        @PostMapping("/{id}/delete")
+        public String deleteLesson(@PathVariable("id") Integer id) {
+            Lesson lesson = lessonService.findById(id);
+            if (lesson != null) {
+                lessonService.deleteLesson(id);
+                return "redirect:/courses";
+            }
+            return "redirect:/courses";
+        }
+    @GetMapping("/{id}/detail")
+    public String detailLesson(@PathVariable("id") Integer id,Model model) {
+        {
+            Lesson lesson = lessonService.findById(id);
+            if (lesson != null) {
+                model.addAttribute("lesson", lesson);
+                return "lessons/detail";
+            }
+            return "redirect:/courses";
+        }
     }
-    return "redirect:/courses";
-}
+
+    public String validazioni(Lesson lesson){
+
+        String cleanedText = lesson.getDescription().replaceAll("<[^>]*>", " ").trim();
+
+        if((lesson.getTitle().isEmpty()) || (lesson.getTitle() == null)){
+            return "Il titolo non può essere vuoto";
+        }
+        if((lesson.getDuration() == null) || (lesson.getDuration().isEmpty())){
+            return "La durata deve essere valorizzata";
+        }
+        if((cleanedText == null) || (cleanedText.isEmpty())){
+            return "La descrizione deve essere valorizzata";
+        }
+
+
+        return null;
+    }
 }

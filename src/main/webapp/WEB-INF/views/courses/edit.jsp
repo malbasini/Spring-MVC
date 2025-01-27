@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-3 d-flex align-items-center">
                 <button type="submit" class="btn btn-primary btn-lg btn-block">Salva</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                <button class="btn btn-danger btn-lg btn-block" type="button" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-danger btn-lg btn-block" type="button"  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fas fa-trash-alt"></i></button>
             </div>
         </div>
         <input type="hidden" ${course.id}>
@@ -108,21 +108,20 @@
     </div>
     <section>
     <form method="post" action="${pageContext.request.contextPath}/courses/${course.id}/delete">
-        <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal-title" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="delete-modal-title">Conferma eliminazione</h5>
-                        <button class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Elimina Corso</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Stai per eliminare il corso e tutte le lezioni associate e non potrai recuperarlo. Confermi l'eliminazione?</p>
+                        Stai per eliminare il corso e tutte le lezioni associate. Sei sicuro?
                     </div>
-                    <div class="modal-footer justify-content-between">
-                        <button class="btn btn-light" type="button" data-dismiss="modal">Annulla</button>
-                        <button type="submit" class="btn btn-danger">Conferma</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Elimina</button>
                     </div>
                 </div>
             </div>

@@ -48,7 +48,9 @@ public class CourseJdbcRepository {
         return jdbcTemplate.update(sql, course.getTitle());
     }
     public int deleteCourse(int id) {
-        String sql = "DELETE FROM Courses WHERE Id = ?";
+        String sql = "DELETE FROM Lessons WHERE CourseId = ?";
+        jdbcTemplate.update(sql, id);
+        sql = "DELETE FROM Courses WHERE Id = ?";
         return jdbcTemplate.update(sql, id);
     }
 
