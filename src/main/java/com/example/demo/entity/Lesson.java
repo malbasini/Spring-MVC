@@ -84,6 +84,9 @@ public class Lesson {
 
     @Column(length = 100)
     private String duration;
+    @Column(length = 100)
+    private String orderLesson = "1000";
+    @Column(length = 450)
     private String rowVersion;
     @ManyToOne
     @JoinColumn(name = "CourseId", nullable = false)
