@@ -191,7 +191,7 @@ public class HibernateConfig {
         }
         dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/MyCourse");
         dataSource.setUser("root");
-        dataSource.setPassword("password");
+        dataSource.setPassword("KHJuial0a100?");
 
         // Configurazioni c3p0 per gestire connessioni abbandonate
         dataSource.setMaxIdleTimeExcessConnections(300); // Tempo massimo di inattività per le connessioni in eccesso
