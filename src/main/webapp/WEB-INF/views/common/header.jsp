@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -19,19 +20,29 @@
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <a class="navbar-brand"><img src="<c:url value="/resources/images/logo.svg"/>" height="30px"></a>
-    <button class="navbar-toggler" data-target="#navbar" data-toggle="collapse">
+    <!-- Bottone toggle per mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div id="navbar" class="collapse navbar-collapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="${pageContext.request.contextPath}/courses">Catalogo corsi</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="https://mailtrap.io">Mail Trap</a>
+    <!-- Contenuto collapsable -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Altre voci di menu a sinistra (opzionali) -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/courses">Catalogo corsi</a>
+        </ul>
+        <!-- Link Login e Register a destra -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <sec:authorize access="isAuthenticated()">
+                <a class="nav-link" href="#" >Benvenuto <sec:authentication property="name" />!</a>&nbsb;&nbsp;&nbsp;
+                <a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a>
+            </sec:authorize>
+            <sec:authorize access="!isAuthenticated()">
+                <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+            </sec:authorize>
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/register">Registrati</a>
             </li>
         </ul>
     </div>

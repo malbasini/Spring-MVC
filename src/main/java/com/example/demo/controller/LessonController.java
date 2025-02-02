@@ -216,6 +216,10 @@ public class LessonController {
         Course course = courseService.findById(courseId);
         model.addAttribute("courseId", courseId);
         lesson.setCourse(course);
+        if(lesson.getTitle().isEmpty()|| lesson.getTitle() == null) {
+            model.addAttribute("message", "Il Titolo è obbligatorio");
+            return "lessons/create"; // JSP da mostrare
+        }
         try {
             lessonService.saveLesson(lesson.getTitle(),courseId);
         }
@@ -301,7 +305,7 @@ public class LessonController {
         if((lesson.getTitle().isEmpty()) || (lesson.getTitle() == null)){
             return "Il titolo non può essere vuoto";
         }
-        if((lesson.getDuration() == null) || (lesson.getDuration().isEmpty())){
+        if((lesson.getDuration() == null) || (lesson.getDuration().isEmpty())|| lesson.getDuration().equals("00:00:00")){
             return "La durata deve essere valorizzata";
         }
         if((cleanedText == null) || (cleanedText.isEmpty())){

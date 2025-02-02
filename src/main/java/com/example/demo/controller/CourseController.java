@@ -1,5 +1,9 @@
 package com.example.demo.controller;
+import com.example.demo.repository.SubscriptionRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CourseService;
+import com.example.demo.service.SubscriptionService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +14,11 @@ import org.springframework.validation.BindingResult;
 import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
+import java.security.Principal;
+import java.sql.Date;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import org.apache.commons.fileupload.FileItem;
@@ -24,162 +32,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
-
-/*--## AI Assistant
-Il codice fornito rappresenta un **controller Spring MVC** chiamato `CourseController`,
-che gestisce le operazioni CRUD (Create, Read, Update, Delete) su un'entità
-chiamata `Course`. Questo controller utilizza annotazioni di Spring per mappare
-le richieste HTTP ai metodi corrispondenti e si interfaccia con un
-servizio (`CourseService`) per accedere e manipolare i dati relativi ai corsi.
-
-### Spiegazione in dettaglio
-Il controller è decorato con le seguenti annotazioni principali:
-
-1. **`@Controller`**:
-   Indica che questa classe è un controller Spring, che risponde alle richieste
-   HTTP e restituisce viste (es. pagine JSP).
-
-2. **`@RequestMapping("/courses")`**:
-   Specifica che tutte le richieste verso questo controller inizieranno
-   con il prefisso `/courses`. Ad esempio, una richiesta GET a `/courses`
-   verrà gestita dal metodo `listCourses()`.
-
-3. **`@Autowired`**:
-   Il servizio `CourseService` viene iniettato automaticamente tramite
-   Spring Dependency Injection.
-
-### Metodi del controller
-Ecco i dettagli dei metodi e delle operazioni gestite:
-
-#### 1. **Elenco dei corsi (`GET /courses`)**
-```java
-@GetMapping
-public String listCourses(Model model) {
-    List<Course> courses = courseService.findAll();
-    model.addAttribute("courses", courses);
-    return "courses/list";
-}
-```
-- **Descrizione**: Questo metodo gestisce le richieste GET a `/courses`.
-- **Azioni**:
-  - Chiama il servizio (`courseService.findAll()`) per recuperare l'elenco dei corsi.
-  - Aggiunge tutti i corsi al modello (oggetto `Model`) come attributo `courses`.
-  - Restituisce la vista `courses/list`, che è normalmente un file JSP o una pagina
-  HTML che mostra l'elenco dei corsi.
-
-#### 2. **Form per creare un nuovo corso (`GET /courses/new`)**
-```java
-@GetMapping("/new")
-public String showCreateForm(Model model) {
-    model.addAttribute("course", new Course());
-    return "courses/form";
-}
-```
-- **Descrizione**: Gestisce le richieste GET a `/courses/new`.
-- **Azioni**:
-  - Aggiunge un nuovo oggetto vuoto di tipo `Course` al modello come attributo `course`.
-  - Restituisce la vista `courses/form`, che mostra un modulo per inserire i dati
-  del nuovo corso.
-
-#### 3. **Salvataggio di un nuovo corso (`POST /courses`)**
-```java
-@PostMapping
-public String createCourse(@ModelAttribute("course") Course course) {
-    courseService.save(course);
-    return "redirect:/courses";
-}
-```
-- **Descrizione**: Gestisce le richieste POST a `/courses`.
-- **Azioni**:
-  - L'oggetto `Course` inviato dal modulo (tramite il binding dei dati con `@ModelAttribute`)
-  viene salvato utilizzando il metodo `save()` del servizio.
-  - Dopo il salvataggio, reindirizza alla lista dei corsi (`redirect:/courses`).
-
-#### 4. **Form di modifica di un corso (`GET /courses/{id}/edit`)**
-```java
-@GetMapping("/{id}/edit")
-public String editCourse(@PathVariable("id") Integer id, Model model) {
-    Course course = courseService.findById(id);
-    if (course == null) {
-        return "redirect:/courses";
-    }
-    model.addAttribute("course", course);
-    return "courses/form";
-}
-```
-- **Descrizione**: Gestisce le richieste GET a `/courses/{id}/edit`.
-- **Azioni**:
-  - Recupera il corso con l'ID specificato tramite il servizio (`courseService.findById(id)`).
-  - Se il corso non è trovato, reindirizza all'elenco dei corsi.
-  - Se il corso esiste, lo aggiunge come attributo `course` al modello.
-  - Mostra la vista `courses/form`, riutilizzando il modulo per modificare il corso.
-
-#### 5. **Aggiornamento di un corso (`POST /courses/{id}`)**
-```java
-@PostMapping("/{id}")
-public String updateCourse(@PathVariable("id") Integer id,
-                           @ModelAttribute("course") Course updatedCourse) {
-    updatedCourse.setId(id);
-    courseService.save(updatedCourse);
-    return "redirect:/courses";
-}
-```
-- **Descrizione**: Gestisce le richieste POST a `/courses/{id}`.
-- **Azioni**:
-  - Aggiorna l'oggetto `Course` con l'ID specificato (`updatedCourse.setId(id)`).
-  - Usa il metodo `save()` del servizio per aggiornare o sostituire il corso salvato.
-  - Reindirizza all'elenco dei corsi.
-
-#### 6. **Eliminazione di un corso (`POST /courses/{id}/delete`)**
-```java
-@PostMapping("/{id}/delete")
-public String deleteCourse(@PathVariable("id") Integer id) {
-    courseService.deleteById(id);
-    return "redirect:/courses";
-}
-```
-- **Descrizione**: Gestisce le richieste POST a `/courses/{id}/delete`.
-- **Azioni**:
-  - Elimina il corso con l'ID specificato tramite il metodo `deleteById()` del servizio.
-  - Reindirizza alla lista dei corsi dopo l'eliminazione.
-
-### Servizio correlato: `CourseService`
-Questo controller si affida a un servizio di accesso ai dati (`CourseService`),
-che contiene i metodi seguenti:
-- **`findAll()`**: Restituisce tutti i corsi.
-- **`findById(Integer id)`**: Restituisce un corso dato il suo ID.
-- **`save(Course course)`**: Salva o aggiorna un corso.
-- **`deleteById(Integer id)`**: Elimina il corso con l'ID specificato.
-
-### Riassunto
-- Questo controller segue l'approccio MVC di Spring. L'interfaccia utente interagisce
-con le viste (JSP/HTML), e il controller gestisce le richieste HTTP, delegando al
-servizio che si occupa della logica dei dati.
-- Il prefisso `/courses` è utilizzato per tutte le operazioni relative ai corsi
- (visualizzazione, creazione, modifica ed eliminazione).
-- Ogni operazione HTTP è chiaramente separata, con metodi dedicati per GET e POST.
-
-*/
 @Controller
 @RequestMapping("/courses")
 public class CourseController {
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private SubscriptionService subscriptionService;
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
     @Value("${upload.path:uploads}")
     private String uploadDir;
-    // GET /courses -> listing di tutti i corsi
-    /*
-    @GetMapping
-    public String listCourses(Model model) {
-        List<Course> courses = courseService.findAll();
-        model.addAttribute("courses", courses);
-        return "courses/list"; // JSP da mostrare
-    }
-    */
     // GET /courses -> listing di tutti i corsi con supporto a paginazione, ricerca e ordinamento
     @GetMapping
     public String listCourses(
@@ -187,9 +62,18 @@ public class CourseController {
             @RequestParam(defaultValue = "10") int size, // Elementi per pagina
             @RequestParam(defaultValue = "") String title, // Filtro per titolo
             @RequestParam(defaultValue = "title") String sortBy, // Campo di ordinamento
-            @RequestParam(defaultValue = "asc") String sortDirection, // Direzione dell'ordinamento
+            @RequestParam(defaultValue = "asc") String sortDirection,
+            Principal principal,// Direzione dell'ordinamento
             Model model
     ) {
+
+        String loggedUsername = principal.getName();
+        User user = userRepository.findByUsername(loggedUsername);
+        if (user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_TEACHER")))
+        {
+            model.addAttribute("isTeacher",true);
+        }
+
         // Ottenere i corsi con paginazione, ricerca e ordinamento
         Page<Course> courses = courseService.findCourses(page, size, title, sortBy, sortDirection);
 
@@ -206,14 +90,24 @@ public class CourseController {
 
     // GET /courses/new -> mostra form per creare un nuovo corso
     @GetMapping("/new")
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     public String showCreateForm(Model model) {
         model.addAttribute("course", new Course());
         return "courses/create"; // JSP da mostrare
     }
     // POST /courses -> salva un nuovo corso
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     public String create(@Valid @ModelAttribute("course") Course course
-            ,BindingResult bindingResult, Model model) {
+            ,BindingResult bindingResult, Model model,Authentication authentication) {
+
+
+        String username = authentication.getName();  // lo username loggato
+        User user = courseService.findByUsername(username);
+
+        // Imposta l'utente proprietario
+        course.setUserOwner(user);
+
         if(course.getTitle()==null || course.getTitle().isEmpty()){
             model.addAttribute("message", "Il titolo è obbligatorio");
             return "courses/create";
@@ -222,51 +116,131 @@ public class CourseController {
             return "courses/create"; // JSP da mostrare
         }
         try {
-            courseService.saveCourse(course);
+            int courseId = courseService.saveCourse(course);
+            course.setId(courseId);
         }
-        catch (RuntimeException ex){
-            model.addAttribute("message", ex.getMessage());
+        catch (Exception ex){
+            model.addAttribute("message", "Il titolo è già esistente");
             return "courses/create";
         }
-        catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
-            return "courses/create"; // JSP da mostrare
-        }
-        model.addAttribute("message", "Inserimento corso avvenuto con successo");
-        return "Courses/edit"; // Torna alla vista di edit
+        model.addAttribute("message1", "Inserimento corso avvenuto con successo. Ora inserisci gli altri dati");
+        return "redirect:/courses/" + course.getId() + "/edit"; // JSP da mostrare
 
     }
-    @GetMapping("/course/{id}/detail")
-    public String courseDetail(@PathVariable Integer id,Model model) {
+    @GetMapping(value = "/course/{id}/detail")
+    public String courseDetail(@PathVariable Integer id,
+                               @RequestParam(name = "message", required = false) String message,
+                               Model model,
+                               Principal principal) {
         Course course = courseService.getCourseByIdWithLessons(id);
         if (course == null) {
             return "redirect:/courses"; // Gestione caso corso non trovato
         }
-
+        boolean isTeacher = false;
+        boolean isStudent = false;
+        // L'utente loggato
+        String loggedUsername = principal.getName();
+        User user = userRepository.findByUsername(loggedUsername);
+        if(user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_STUDENT"))) {
+            course.setUserOwner(user);// es: "mariorossi"
+            isStudent = true;
+            model.addAttribute("isStudent",isStudent);
+            Subscription subscription = subscriptionRepository.findByCourse_Id(course.getId());
+            if(subscription != null) {
+                model.addAttribute("subscription", true);
+            }
+        }
+        if(course.getUserOwner()==null)
+            return "security/access-denied";
+        if(course.getUserOwner().getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_TEACHER"))){
+            isTeacher = true;
+            model.addAttribute("isTeacher",isTeacher);
+        }
+        // Verifico se il proprietario del corso è lo stesso che ha fatto login
+        boolean isOwner = (course.getUserOwner().getUsername().equals(loggedUsername) && isTeacher);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("message", message);
         // Calcola la durata totale
         Duration totalDuration = calculateTotalDuration(course.getLessons());
         model.addAttribute("course", course);
         model.addAttribute("totalDuration", formatDuration(totalDuration));
         return "courses/detail"; // JSP da mostrare
+
     }
     // GET /courses/{id}/edit -> mostra form di modifica
     @GetMapping("/{id}/edit")
-    public String editCourse(@PathVariable("id") Integer id, Model model) {
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
+    public String editCourse(@PathVariable("id") Integer id,
+                             @RequestParam(name = "message", required = false) String message,
+                             @RequestParam(name = "message1", required = false) String message1,
+                             Model model,
+                             Principal principal) {
         Course course = courseService.findById(id);
         if (course == null) {
             // gestisci errore se non trovato
             return "redirect:/courses";
         }
-        model.addAttribute("course", course);
-        return "courses/edit"; // JSP da mostrare
+        if(course.getUserOwner() == null) {
+            return "security/access-denied";
+        }
+        else
+        {
+            boolean isTeacher = false;
+            boolean isStudent = false;
+            // L'utente loggato
+            String loggedUsername = principal.getName();
+            User user = userRepository.findByUsername(loggedUsername);
+            if(user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_STUDENT"))) {
+                course.setUserOwner(user);// es: "mariorossi"
+                isStudent = true;
+                model.addAttribute("isStudent",isStudent);
+                Subscription subscription = subscriptionRepository.findByCourse_Id(course.getId());
+                if(subscription != null) {
+                    model.addAttribute("subscription", true);
+                }
+            }
+            if(course.getUserOwner()==null)
+                return "security/access-denied";
+            if(course.getUserOwner().getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_TEACHER"))){
+                isTeacher = true;
+                model.addAttribute("isTeacher",isTeacher);
+            }
+            // Verifico se il proprietario del corso è lo stesso che ha fatto login
+            boolean isOwner = (course.getUserOwner().getUsername().equals(loggedUsername) && isTeacher);
+            model.addAttribute("isOwner", isOwner);
+            model.addAttribute("course", course);
+            model.addAttribute("iduser",course.getUserOwner().getId());
+            model.addAttribute("message", message);
+            model.addAttribute("message1", message1);
+            return "/courses/edit"; // JSP da mostrare
+        }
     }
     // POST /courses/{id} -> aggiorna un corso esistente
-    @PostMapping("/{id}")
-    public String updateCourse(@PathVariable("id") Integer id,
+    @PostMapping("/{id}/{iduser}")
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
+    public String updateCourse(@PathVariable("id") Integer id, @PathVariable("iduser") Integer idUser,
                                @ModelAttribute("course") @Valid Course updatedCourse,
-                               BindingResult bindingResult, Model model) {
+                               BindingResult bindingResult, Model model, Principal principal) {
+        // L'utente loggato
+        String loggedUsername = principal.getName(); // es: "mariorossi"
+        if (idUser != null)
+        {
+            Optional<User> optionalUser = userRepository.findById(idUser);
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                // Verifico se il proprietario del corso è lo stesso che ha fatto login
+                if (!user.getUsername().equals(loggedUsername)) {
+                    // se non sei il proprietario, redirect o errore
+                    return "security/access-denied";
+                }
+                else {
+                   updatedCourse.setUserOwner(user);
+                }
+            }
+        }
+
         if (bindingResult.hasErrors()) {
-            return "courses/edit"; // JSP da mostrare
+            return "redirect:/courses/" + updatedCourse.getId() + "/edit"; // JSP da mostrare
         }
         String imagePath = courseService.findById(id).getImagePath();
         // Validazioni
@@ -276,7 +250,7 @@ public class CourseController {
             updatedCourse.setCurrentPriceCurrency("EUR");
             updatedCourse.setFullPriceCurrency("EUR");
             updatedCourse.setImagePath(imagePath);
-            return "courses/edit";
+            return "redirect:/courses/" + updatedCourse.getId() + "/edit";
         }
          // Assicuriamoci che l'ID coincida
         updatedCourse.setId(id);
@@ -285,15 +259,51 @@ public class CourseController {
             model.addAttribute("message", "Course updated successfully");
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
-            return "courses/edit"; // JSP da mostrare
+            return "redirect:/courses/" + updatedCourse.getId() + "/edit"; // JSP da mostrare
         }
         return "redirect:/courses";
 }
     // POST /courses/{id}/delete -> cancella un corso
     @PostMapping("/{id}/delete")
-    public String deleteCourse(@PathVariable("id") Integer id) {
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
+    public String deleteCourse(@PathVariable("id") Integer id,Principal principal,Model model) {
+        Course course = courseService.findById(id);
+        String loggedUsername = principal.getName(); // es: "mariorossi"
+        Subscription subscription = subscriptionRepository.findByCourse_Id(id);
+        if(subscription != null) {
+            model.addAttribute("message","Corso acquistato, impossibile eliminarlo");
+            return "redirect:/courses/course/" + course.getId() + "/detail";
+        }
+        // Verifico se il proprietario del corso è lo stesso che ha fatto login
+        boolean isOwner = course.getUserOwner().getUsername().equals(loggedUsername);
+        User user = courseService.findByUsername(course.getUserOwner().getUsername());
+        if (!isOwner) {
+            // se non sei il proprietario, redirect o errore
+            return "redirect:security/access-denied";
+        }
         courseService.deleteCourse(id);
         return "redirect:/courses";
+    }
+    @PostMapping("/{courseId}/{userId}/subscription")
+    public String Subscription(@PathVariable("courseId") Integer courseId, @PathVariable("userId") Integer userId, Principal principal,Model model) {
+        Course course = courseService.findById(courseId);
+        User user = courseService.findByUsername(principal.getName());
+        if(user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_STUDENT"))) {
+            Subscription subscription = new Subscription();
+            subscription.setCourse(course);
+            subscription.setUser(user);
+            subscription.setPaidAmount(course.getCurrentPriceAmount());
+            LocalDate currentDate = LocalDate.now();
+            // Oppure ottieni data e ora completa
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            // Se hai bisogno di una data SQL (es. per Database)
+            String sqlDate = Date.valueOf(currentDate).toString();
+            subscription.setPaymentDate(sqlDate);
+            subscription.setVote(5);
+            int idSubscription = subscriptionService.saveSubscription(subscription);
+            model.addAttribute("message", "Iscrizione avvenuta con successo. Ora puoi consultare il corso acquistato");
+        }
+        return "redirect:/courses/course/" + course.getId() + "/detail";
     }
     // Calcola la durata totale di una lista di lezioni
     private Duration calculateTotalDuration(List<Lesson> lessons) {
@@ -313,13 +323,13 @@ public class CourseController {
                               Model model) {
         if (file.isEmpty()) {
             model.addAttribute("error", "File non valido.");
-            return "Courses/edit"; // Torna alla vista
+            return "redirect:/courses/" + id + "/edit"; // Torna alla vista
         }
         Course course = courseService.findById(id);
         String message = validazioni(course,model);
         if(message != null) {
             model.addAttribute("message", message);
-            return "courses/edit";
+            return "redirect:/courses/" + id + "/edit";
         }
         try {
             // Creare la directory di upload se non esiste
@@ -337,7 +347,7 @@ public class CourseController {
             Course c = courseService.findById(id);
             if (c == null) {
                 // gestisci errore se non trovato
-                return "Courses/edit"; // Torna alla vista
+                return "redirect:/courses/" + id + "/edit";  // Torna alla vista
             }
             course.setImagePath("/uploads/" + fileName);
             courseService.updateImagePath(course.getImagePath(),course.getId());
@@ -348,31 +358,39 @@ public class CourseController {
 
         } catch (IOException e) {
             model.addAttribute("error", "Errore durante il caricamento del file: " + e.getMessage());
-            return "Courses/edit"; //
+            return "redirect:/courses/" + id + "/edit";  //
         }
     }
     public String validazioni(Course course, Model model)
     {
-        String cleanedText = course.getDescription().replaceAll("<[^>]*>", " ").trim();
+        String cleanedText = "";
+        if(course.getDescription()!=null) {
+            cleanedText = course.getDescription().replaceAll("<[^>]*>", " ").trim();
+        }
+        else
+        {
+            model.addAttribute("message", "Descrizione obbligatoria");
+            return "Descrizione obbligatoria";
+        }
         if(course.getTitle()==null || course.getTitle().isEmpty()){
-            model.addAttribute("message", "Il titolo è obbligatorio");
-            return "Il titolo è obbligatorio";
+            model.addAttribute("message", "Titolo obbligatorio");
+            return "Titolo obbligatorio";
         }
         if(course.getAuthor()==null || course.getAuthor().isEmpty()){
-            model.addAttribute("message", "L'auotore è obbligatorio");
-            return "L'auotore è obbligatorio";
+            model.addAttribute("message", "Autore obbligatorio");
+            return "Autore obbligatorio";
         }
-        if(cleanedText==null || cleanedText.isEmpty()){
-            model.addAttribute("message", "La descrizione è obbligatoria");
-            return "La descrizione è obbligatoria";
+        if(course.getEmail()==null || course.getEmail().isEmpty()){
+            model.addAttribute("message", "Email obbligatoria");
+            return "Email obbligatoria";
         }
         if(course.getFullPriceAmount()==null || (course.getFullPriceAmount().compareTo(BigDecimal.ZERO) < 0)){
-            model.addAttribute("message", "Il prezzo intero è obbligatorio e deve essere maggiore di zero");
-            return "Il prezzo intero è obbligatorio e deve essere maggiore di zero";
+            model.addAttribute("message", "Prezzo intero obbligatorio e deve essere maggiore di zero");
+            return "Prezzo intero obbligatorio e deve essere maggiore di zero";
         }
         if(course.getCurrentPriceAmount()==null || (course.getCurrentPriceAmount().compareTo(BigDecimal.ZERO) < 0)){
-            model.addAttribute("message", "Il prezzo corrente è obbligatorio e deve essere maggiore di zero");
-            return "Il prezzo corrente è obbligatorio e deve essere maggiore di zero";
+            model.addAttribute("message", "Prezzo corrente obbligatorio e deve essere maggiore di zero");
+            return "Prezzo corrente obbligatorio e deve essere maggiore di zero";
         }
         if((course.getCurrentPriceAmount().compareTo(course.getFullPriceAmount())) > 0) {
            model.addAttribute("message", "prezzo scontato maggiore del prezzo intero");

@@ -7,15 +7,16 @@
             ${message}
     </div>
 </c:if>
-<c:if test="${empty message}">
+<c:if test="${not empty message1}">
     <div class="alert alert-success" role="alert">
-            ${message}
+            ${message1}
     </div>
 </c:if>
 <br>
 <h1>Crea nuovo corso</h1>
 <br>
 <form method="post" action="${pageContext.request.contextPath}/courses">
+    <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <div class="row">
         <div class="col-md-1">
             <label for="title" class="form-label">Titolo del corso</label>

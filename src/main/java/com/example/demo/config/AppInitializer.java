@@ -1,7 +1,11 @@
 package com.example.demo.config;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
+import javax.servlet.Filter;
+
 /*--## AI Assistant
 Il codice iniziale rappresenta una classe di configurazione che estende `AbstractAnnotationConfigDispatcherServletInitializer`, ed è utilizzata per configurare un'applicazione Java Spring basata su **Spring MVC** e **Hibernate**. Questa classe funge da punto di inizializzazione (simile a un file `web.xml` in applicazioni più datate) per una web application e definisce la configurazione root e quella specifica per il contesto web.
 
@@ -125,21 +129,27 @@ In sintesi, questa configurazione è un tipico esempio di un'applicazione Spring
 @ComponentScan(basePackages = "com.example.demo")
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    // Configurazione root (ad esempio Hibernate, sicurezza, ecc.)
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{HibernateConfig.class}; // Configurazioni di Hibernate
+        return new Class[]{SecurityConfig.class, HibernateConfig.class}; // Contesto principale (Spring Security)
     }
 
-    // Configurazione del contesto Web (Spring MVC)
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{WebMvcConfig.class}; // Configurazioni MVC
+        return new Class[]{WebMvcConfig.class}; // Contesto specifico MVC
     }
 
-    // Mappatura delle richieste per il DispatcherServlet
     @Override
     protected String[] getServletMappings() {
-        return new String[]{"/"}; // Tutte le richieste passano per il DispatcherServlet
+        return new String[]{"/"};
+    }
+
+    @Override
+    protected Filter[] getServletFilters() {
+        // Aggiungiamo il DelegatingFilterProxy
+        return new Filter[]{
+                new org.springframework.web.filter.DelegatingFilterProxy("springSecurityFilterChain")
+        };
     }
 }
+

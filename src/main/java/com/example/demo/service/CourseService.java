@@ -147,14 +147,14 @@ tabelle/entità del database).
 public interface CourseService {
     Iterable<Course> findAll();
     Course findById(Integer id);
-    Course save(Course course);
     void deleteById(Integer id);
     Page<Course> findCourses(int page, int size, String title, String sortBy, String sortDirection);
     List<Course> getTopRatedCourses();
     List<Course> getNewestCourses();
-    void saveCourse(Course course);
+    int saveCourse(Course course);
     Course getCourseByIdWithLessons(Integer id);
     void updateCourse(Course course);
     void deleteCourse(int id);
     void updateImagePath(String image, int id);
+    User findByUsername(String username);
 }

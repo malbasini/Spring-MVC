@@ -14,6 +14,7 @@
 <br>
 <section>
     <h2>Aggiunti di recente</h2>
+    <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <c:forEach items="${newestCourses}" var="course">
         <hr>
         <div class="row course">

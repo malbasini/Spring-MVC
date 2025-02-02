@@ -8,6 +8,13 @@
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<br>
+<c:if test="${not empty message}">
+    <div class="alert alert-success" role="alert">
+            ${message}
+    </div>
+</c:if>
 <br>
 <section class="course-info">
     <div class="row">
@@ -15,8 +22,14 @@
             <h1>Dettaglio</h1>
         </div>
         <div class="col-md-3 d-flex align-items-center">
-            <a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/courses/${course.id}/edit">Modifica</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="btn btn-warning btn-bloc">Iscriviti</button>
+            <c:if test="${isOwner && isTeacher}">
+                <a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/courses/${course.id}/edit">Modifica</a>&nbsp;&nbsp;&nbsp;
+            </c:if>&nbsp;
+            <c:if test="${isStudent && not subscription}">
+                <form action="${pageContext.request.contextPath}/courses/${course.id}/${course.userOwner.id}/subscription" method="post">
+                     <button type="submit" class="btn btn-warning btn-bloc">Iscriviti</button>
+                </form>
+            </c:if>&nbsp;
         </div>
     </div>
     <div class="row">
@@ -59,9 +72,12 @@
     </div>
 </section>
 <section class="course-lessons">
+    <c:if test="${(isOwner && isTeacher) || (subscription && isStudent)}">
     <h2>Lezioni</h2>
-    <a class ="btn btn-outline-primary btn-sm" href="${pageContext.request.contextPath}/lessons/new/${course.id}"><i class ="fas fa-plus" ></i > Crea nuova </a>
-    <c:forEach var="lesson" items="${course.lessons}">
+    <c:if test="${(isOwner && isTeacher)}">
+           <a class ="btn btn-outline-primary btn-sm" href="${pageContext.request.contextPath}/lessons/new/${course.id}"><i class ="fas fa-plus" ></i > Crea nuova </a>
+    </c:if>
+        <c:forEach var="lesson" items="${course.lessons}">
         <hr />
     <div class="row">
         <div class="col-md-3 d-flex align-items-center">
@@ -72,7 +88,9 @@
         </div>
         <div class="col-md-2 d-flex align-items-center justify-content-end lesson-duration">
             <i class="far fa-clock"></i><time>${lesson.duration}</time>
-            <a class="btn btn-outline-primary btn-sm ml-3" href="${pageContext.request.contextPath}/lessons/${lesson.id}/edit"><i class="fas fa-pencil-alt"></i></a>
+            <c:if test="${isOwner && isTeacher}">
+                <a class="btn btn-outline-primary btn-sm ml-3" href="${pageContext.request.contextPath}/lessons/${lesson.id}/edit"><i class="fas fa-pencil-alt"></i></a>
+            </c:if>
         </div>
     </div>
     </c:forEach>
@@ -85,19 +103,6 @@
             <i class="far fa-clock"></i><time>${totalDuration}</time>
         </div>
     </div>
+    </c:if>
 </section>
-<!-- Modal -->
-<div class="modal fade" id="voteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fs-5" id="exampleModalLabel">Esprimi la tua valutazione</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <iframe width="100%" height="100" frameBorder="0"></iframe>
-            </div>
-        </div>
-    </div>
-</div>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

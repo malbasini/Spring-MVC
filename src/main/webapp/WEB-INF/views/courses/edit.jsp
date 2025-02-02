@@ -8,6 +8,7 @@
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!-- Alert Condizionale -->
 <br>
 <c:if test="${not empty message}">
@@ -15,24 +16,29 @@
         ${message}
     </div>
 </c:if>
-<c:if test="${empty message}">
+<c:if test="${not empty message1}">
     <div class="alert alert-success" role="alert">
-            ${message}
+            ${message1}
     </div>
 </c:if>
 <br>
 <section class="course-info">
-    <form method="post" action="${pageContext.request.contextPath}/courses/${course.id}">
+    <form method="post" action="${pageContext.request.contextPath}/courses/${course.id}/${iduser}">
+        <input type="hidden" name="_csrf" value="${_csrf.token}" />
         <div class="row">
             <div class="col-md-9">
                 <h1>Aggiorna Corso</h1>
             </div>
-            <div class="col-md-3 d-flex align-items-center">
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Salva</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                <button class="btn btn-danger btn-lg btn-block" type="button"  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fas fa-trash-alt"></i></button>
-            </div>
+            <c:if test="${isOwner && isTeacher}">
+                <!-- Qui dentro verrà mostrato solo se l'utente loggato ha 'ROLE_TEACHER' -->
+                <div class="col-md-3 d-flex align-items-center">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Salva</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-danger btn-lg btn-block" type="button"  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            </c:if>&nbsp;
         </div>
         <input type="hidden" ${course.id}>
+        <input type="hidden" id="iduser" name="iduser" value="${iduser}">
         <div class="row">
             <div class="col-md-9">
                 <div class="form-group">
@@ -98,16 +104,21 @@
         <div class="col-md-9"></div>
         <div class="col-md-3 form-group">
             <form action="${pageContext.request.contextPath}/courses/${course.id}/uploadImage" method="post" enctype="multipart/form-data">
-                <br>
-                <label for="imageFile">Immagine Prodotto:</label>
-                <br>
-                <input type="file" class="btn-btn-danger" name="imageFile" id="imageFile" /><br><br>
-                <button type="submit" class="btn btn-dark">Carica</button>
+                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                    <c:if test="${isOwner && isTeacher}">
+                        <br>
+                        <label for="imageFile">Immagine Prodotto:</label>
+                        <br>
+                        <!-- Qui dentro verrà mostrato solo se l'utente loggato ha 'ROLE_TEACHER' -->
+                        <input type="file" class="btn-btn-danger" name="imageFile" id="imageFile" /><br><br>
+                        <button type="submit" class="btn btn-dark">Carica</button>
+                    </c:if>&nbsp;
             </form>
         </div>
     </div>
     <section>
     <form method="post" action="${pageContext.request.contextPath}/courses/${course.id}/delete">
+        <input type="hidden" name="_csrf" value="${_csrf.token}" />
         <!-- Modal -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

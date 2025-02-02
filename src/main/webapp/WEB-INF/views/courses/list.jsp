@@ -1,11 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <br>
 <% String pageTitle = "Catalogo dei corsi"; request.setAttribute("pageTitle", pageTitle); %>
 <div class="row">
     <div class="col-md-8">
-        <h2><%=request.getAttribute("pageTitle")%> <a href="courses/new" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Crea nuovo </a></h2>
+            <c:if test="${isTeacher}">
+                <div>
+                    <h2><%=request.getAttribute("pageTitle")%> <a href="${pageContext.request.contextPath}/courses/new" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Crea nuovo </a></h2>
+                </div>
+            </c:if>
+            <!-- Qui dentro verrà mostrato solo se l'utente loggato ha 'ROLE_TEACHER' -->
     </div>
     <div class="col-md-4 d-flex align-items-center">
         <form method="get" action="${pageContext.request.contextPath}/courses">
