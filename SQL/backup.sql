@@ -473,4 +473,28 @@ INSERT INTO `Lessons` VALUES(320,32,'Lezione 10','At vero eos et accusamus et iu
 INSERT INTO `roles` VALUES(1,'ROLE_STUDENT');
 INSERT INTO `roles` VALUES(2,'ROLE_TEACHER');
 
+
+CREATE TRIGGER SubscriptionsSetCourseRatingOnUpdate
+    AFTER UPDATE ON Subscription
+    FOR EACH ROW
+BEGIN
+    -- Verifica se il valore di 'Vote' è cambiato
+    IF NEW.Vote <> OLD.Vote THEN
+        UPDATE Courses
+        SET Rating = (
+            SELECT AVG(Vote)
+            FROM Subscription
+            WHERE CourseId = NEW.CourseId
+        )
+        WHERE Id = NEW.CourseId;
+    END IF;
+END;
+
+
+
+
+
+
+
+
 -- Dump completed on 2025-01-27  5:22:28

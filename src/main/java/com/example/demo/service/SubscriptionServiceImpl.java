@@ -16,4 +16,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public int saveSubscription(Subscription subscription) {
         return subscriptionJdbcRepository.saveSubscription(subscription);
     }
+    public void subscriptionVote(int subscriptionId, int vote) {
+        int  rowsAffected = subscriptionJdbcRepository.updateVote(subscriptionId, vote);
+        if (rowsAffected == 0) {
+            throw new RuntimeException("Aggiornamento fallito. Subscription con ID " + subscriptionId + " non trovato.");
+        }
+    }
 }

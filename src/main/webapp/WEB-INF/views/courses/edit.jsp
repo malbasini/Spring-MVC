@@ -107,11 +107,20 @@
                 <input type="hidden" name="_csrf" value="${_csrf.token}" />
                     <c:if test="${isOwner && isTeacher}">
                         <br>
-                        <label for="imageFile">Immagine Prodotto:</label>
+                        <label>Immagine Prodotto:</label>
                         <br>
-                        <!-- Qui dentro verrà mostrato solo se l'utente loggato ha 'ROLE_TEACHER' -->
-                        <input type="file" class="btn-btn-danger" name="imageFile" id="imageFile" /><br><br>
-                        <button type="submit" class="btn btn-dark">Carica</button>
+                        <div class="form-group">
+                            <div class="preview-container">
+                                <input type="hidden" value="${pageContext.request.contextPath}${course.imagePath}">
+                                <img id="preview" src=src="${pageContext.request.contextPath}${course.imagePath}">
+                            </div>
+                            <div class="custom-file mt-3">
+                                <input type="file" name="imageFile" id="imageFile" class="custom-file-input btn btn-warning" src="${pageContext.request.contextPath}${course.imagePath}" onchange="updatePreview(this)">
+                                <br>
+                                <br>
+                                <button type="submit" class="btn btn-secondary">Carica</button>
+                            </div>
+                        </div>
                     </c:if>&nbsp;
             </form>
         </div>
@@ -153,5 +162,14 @@
             ]
         });
     });
+</script>
+<script>
+    function updatePreview(inputFile) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#preview').attr('src', e.target.result);
+        };
+        reader.readAsDataURL(inputFile.files[0]);
+    }
 </script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %> <!-- This is the footer of the page -->

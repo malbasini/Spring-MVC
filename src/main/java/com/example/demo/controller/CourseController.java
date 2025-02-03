@@ -305,6 +305,54 @@ public class CourseController {
         }
         return "redirect:/courses/course/" + course.getId() + "/detail";
     }
+
+
+
+
+    @GetMapping("/{idCourse}/vote")
+    public String vote(@PathVariable("idCourse") Integer idCourse,Principal principal, Model model) {
+        Course course = courseService.findById(idCourse);
+        String loggedUsername = principal.getName(); // es: "mariorossi"
+        Subscription subscription = subscriptionRepository.findByCourse_Id(idCourse);
+        if(subscription != null) {
+            model.addAttribute("courses",course);
+            model.addAttribute("vote",subscription.getVote());
+            return "courses/vote";
+        }
+        return "redirect:/courses/course/" + course.getId() + "/detail";
+    }
+    @PostMapping("/{idCourse}/vote")
+    public String voteCourse(@PathVariable("idCourse") Integer idCourse, @RequestParam("vote") Integer vote, Principal principal, Model model) {
+        Course course = courseService.findById(idCourse);
+        String loggedUsername = principal.getName(); // es: "mariorossi"
+        Subscription subscription = subscriptionRepository.findByCourse_Id(idCourse);
+        if(subscription != null) {
+            subscriptionService.subscriptionVote(subscription.getId(),vote);
+            model.addAttribute("message","Grazie per aver espresso la tua opinione sul corso");
+            return "redirect:/courses/course/" + course.getId() + "/detail";
+        }
+        return "redirect:/courses/course/" + course.getId() + "/detail";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Calcola la durata totale di una lista di lezioni
     private Duration calculateTotalDuration(List<Lesson> lessons) {
         return lessons.stream()

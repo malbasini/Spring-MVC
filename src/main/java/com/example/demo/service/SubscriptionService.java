@@ -5,4 +5,6 @@ import com.example.demo.entity.Subscription;
 public interface SubscriptionService {
 
     int saveSubscription(Subscription subscription);
+    void subscriptionVote(int subscriptionId, int vote);
+
 }

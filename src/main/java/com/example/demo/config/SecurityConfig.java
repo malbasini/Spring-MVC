@@ -25,10 +25,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .headers()
+                .frameOptions().sameOrigin()
+                .and()// or disable()
                 .authorizeRequests()
                 .antMatchers("/login", "/register", "/doRegister","/doLogin").permitAll() // Rotte pubbliche
                 .antMatchers("/teacher/**").hasRole("TEACHER") // Accesso ristretto ai docenti
-                .antMatchers("/student/**").hasRole("STUDENT") // Accesso ristretto agli studenti
+                .antMatchers("/student/**").hasRole("STUDENT")
                 .anyRequest().authenticated() // Tutto il resto richiede autenticazione
                 .and()
                 .formLogin()

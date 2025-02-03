@@ -67,6 +67,10 @@
                 <c:if test="${not fn:contains(course.imagePath, 'upload')}">
                     <img src="${pageContext.request.contextPath}/resources/images/${course.imagePath}" alt="image" class="img-fluid course-image">
                 </c:if>
+                <c:if test="${subscription && isStudent}">
+                    <a class="btn btn-block btn-outline-secondary mt-3">Fai una domanda</a>
+                    <a href="${pageContext.request.contextPath}/courses/${course.id}/vote" class="btn btn-block btn-outline-secondary mt-3" data-bs-toggle="modal" data-bs-target="#voteModal">Valuta il corso</a>
+                </c:if>
             </aside>
         </div>
     </div>
@@ -105,4 +109,23 @@
     </div>
     </c:if>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="voteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fs-5" id="exampleModalLabel">Esprimi la tua valutazione</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe width="100%" height="100" frameBorder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#voteModal').on('shown.bs.modal', function(event) {
+        $(this).find('iframe').attr('src', event.relatedTarget.href);
+    });
+</script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

@@ -24,4 +24,9 @@ public class SubscriptionJdbcRepository {
             throw e;
         }
     }
+    @Transactional
+    public int updateVote(int subscriptionId, int vote) {
+        String sql = "UPDATE Subscription SET Vote = ? WHERE Id = ?";
+        return jdbcTemplate.update(sql, vote, subscriptionId);
+    }
 }
