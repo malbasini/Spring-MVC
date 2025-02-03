@@ -1,4 +1,3 @@
-
 CREATE DATABASE  IF NOT EXISTS `MyCourse` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `MyCourse`;
 -- MySQL dump 10.13  Distrib 8.0.40, for macos14 (arm64)
@@ -27,6 +26,35 @@ USE `MyCourse`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+CREATE TABLE `register` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `username` varchar(100) NOT NULL,
+    `password` varchar(100) NOT NULL,
+     `email` varchar(100) NOT NULL,
+    `enabled` tinyint(1) NOT NULL DEFAULT '1',
+     PRIMARY KEY (`id`),
+    UNIQUE KEY `IDX_EMAIL` (`email`),
+    UNIQUE KEY `username_UNIQUE` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3;
+
+CREATE TABLE `roles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_role_name` (`name`)
+) 
+ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+
+
+
+CREATE TABLE `register_roles` (
+`user_id` int NOT NULL,
+`role_id` int NOT NULL,
+PRIMARY KEY (`user_id`,`role_id`),
+KEY `FK8sjn77fs5psdx4l110g89krnt` (`role_id`),
+CONSTRAINT `FK8sjn77fs5psdx4l110g89krnt` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
+CONSTRAINT `FKag8eawwsterffcj1db9ee0mxr` FOREIGN KEY (`user_id`) REFERENCES `register` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `Courses` (
   `Id` int NOT NULL AUTO_INCREMENT,
@@ -49,6 +77,9 @@ CREATE TABLE `Courses` (
   KEY `fk_courses_user` (`idUser`),
   CONSTRAINT `fk_courses_user` FOREIGN KEY (`idUser`) REFERENCES `register` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=196 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
 CREATE TABLE `Lessons` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `CourseId` int NOT NULL,
@@ -57,41 +88,10 @@ CREATE TABLE `Lessons` (
   `Duration` varchar(100) DEFAULT '00:00:00',
   `Order` varchar(100) DEFAULT '1000',
   `RowVersion` varchar(450) DEFAULT '31-12-9999',
-  `orderLesson` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   KEY `course_id_lesson_course_id_idx` (`CourseId`),
-  CONSTRAINT `course_id_lesson_course_id` FOREIGN KEY (`CourseId`) REFERENCES `Courses` (`Id`) ON DELETE CASCADE,
-  CONSTRAINT `FK6a479iysv9bi3tg5q7bbb02jo` FOREIGN KEY (`CourseId`) REFERENCES `Courses` (`Id`)
+  CONSTRAINT `course_id_lesson_course_id` FOREIGN KEY (`CourseId`) REFERENCES `Courses` (`Id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=325 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `register` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `enabled` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `IDX_EMAIL` (`email`),
-  UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3;
-
-
-CREATE TABLE `register_roles` (
-  `user_id` int NOT NULL,
-  `role_id` int NOT NULL,
-  PRIMARY KEY (`user_id`,`role_id`),
-  KEY `FK8sjn77fs5psdx4l110g89krnt` (`role_id`),
-  CONSTRAINT `FK8sjn77fs5psdx4l110g89krnt` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
-  CONSTRAINT `FKag8eawwsterffcj1db9ee0mxr` FOREIGN KEY (`user_id`) REFERENCES `register` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-CREATE TABLE `roles` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_role_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
 
 CREATE TABLE `Subscription` (
