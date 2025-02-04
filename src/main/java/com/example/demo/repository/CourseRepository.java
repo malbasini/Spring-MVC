@@ -99,7 +99,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     Course findCourseWithLessons(@Param("id") Integer id);
     boolean existsByTitle(String title);
     Course findCourseByAuthorAndId(String author, int courseId);
-
+    Course findCourseById(Integer id);
 }
 
 

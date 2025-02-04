@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
+
 import com.example.demo.entity.*;
 /*--## AI Assistant
 Il codice fornito implementa un **controller Spring MVC** chiamato `LessonController`,
@@ -239,11 +241,11 @@ public class LessonController {
     @GetMapping("/{id}/edit")
     public String editLesson(@PathVariable("id") Integer id, Model model) {
         Lesson lesson = lessonService.findById(id);
-        if (lesson == null) {
+        if (!lesson.equals(null)) {
+            model.addAttribute("lesson", lesson);
             // gestisci errore se non trovato
             return "lesson/edit";
         }
-        model.addAttribute("lesson", lesson);
         return "lessons/edit";
     }
         // POST /lessons/{id} -> aggiornamento
@@ -280,7 +282,7 @@ public class LessonController {
         @PostMapping("/{id}/delete")
         public String deleteLesson(@PathVariable("id") Integer id) {
             Lesson lesson = lessonService.findById(id);
-            if (lesson != null) {
+            if (!lesson.equals(null)) {
                 lessonService.deleteLesson(id);
                 return "redirect:/courses";
             }
@@ -288,14 +290,13 @@ public class LessonController {
         }
     @GetMapping("/{id}/detail")
     public String detailLesson(@PathVariable("id") Integer id,Model model) {
+        Lesson lesson = lessonService.findById(id);
+        if (!lesson.equals(null))
         {
-            Lesson lesson = lessonService.findById(id);
-            if (lesson != null) {
-                model.addAttribute("lesson", lesson);
-                return "lessons/detail";
-            }
-            return "redirect:/courses";
+            model.addAttribute("lesson", lesson);
+            return "lessons/detail";
         }
+        return "redirect:/courses";
     }
 
     public String validazioni(Lesson lesson){

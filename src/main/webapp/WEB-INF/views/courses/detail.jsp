@@ -85,7 +85,12 @@
         <hr />
     <div class="row">
         <div class="col-md-3 d-flex align-items-center">
-            <a href="${pageContext.request.contextPath}/lessons/${lesson.id}/detail">${lesson.title}</a>
+            <c:if test="${(isOwner && isTeacher) || (subscription && isStudent)}">
+                  <a href="${pageContext.request.contextPath}/lessons/${lesson.id}/detail">${lesson.title}</a>
+            </c:if>
+            <c:if test="${not (isOwner && isTeacher) && not (subscription && isStudent)}">
+                ${lesson.title}
+            </c:if>
         </div>
         <div class="col-md-7 d-flex align-items-center">
             <span>${lesson.description}</span>

@@ -1,10 +1,11 @@
 package com.example.demo.service;
-import com.example.demo.entity.Course;
 import com.example.demo.repository.LessonJdbcRepository;
 import com.example.demo.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
+
 import com.example.demo.entity.Lesson;
 /*--## AI Assistant
 Questo codice illustra l'implementazione di un servizio Spring (`LessonServiceImpl`)
@@ -158,7 +159,7 @@ public class LessonServiceImpl implements LessonService {
     }
     @Override
     public Lesson findById(Integer id) {
-        return lessonRepository.findById(id).orElse(null);
+        return lessonRepository.findLessonsById(id);
     }
     @Override
     public Lesson save(Lesson lesson) {

@@ -354,10 +354,6 @@ public class CourseController {
         }
         return "redirect:/courses/course/" + course.getId() + "/detail";
     }
-
-
-
-
     @PostMapping("/{courseId}/sendquestion")
     public String postQuestion(@PathVariable("courseId") Integer courseId,
                                @RequestParam("question") String question,

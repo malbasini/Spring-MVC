@@ -2,6 +2,8 @@ package com.example.demo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
+import java.util.Optional;
+
 import com.example.demo.entity.Lesson;
 /*--Certamente! Ecco una spiegazione chiara di questo frammento di codice Java:
 
@@ -113,4 +115,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
     List<Lesson> findByCourseId(Integer courseId);
     boolean existsByTitleAndCourseId(String title,int courseId);
     Lesson findByTitleAndCourseId(String title,int courseId);
+
+    Lesson findLessonsById(Integer id);
 }

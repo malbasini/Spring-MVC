@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
+
 import com.example.demo.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +34,7 @@ public class CourseServiceImpl implements CourseService {
     }
     @Override
     public Course findById(Integer id) {
-        return courseRepository.findById(id).orElse(null);
+        return courseRepository.findCourseById(id);
     }
     @Transactional
     @Override
