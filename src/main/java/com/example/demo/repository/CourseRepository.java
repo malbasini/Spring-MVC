@@ -98,6 +98,8 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     @Query("SELECT c FROM Course c LEFT JOIN FETCH c.lessons WHERE c.id = :id")
     Course findCourseWithLessons(@Param("id") Integer id);
     boolean existsByTitle(String title);
+    Course findCourseByAuthorAndId(String author, int courseId);
+
 }
 
 

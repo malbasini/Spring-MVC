@@ -165,6 +165,16 @@
           <version>5.0.0</version> <!-- O l'ultima versione disponibile -->
           <scope>provided</scope>
       </dependency>
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-context-support</artifactId>
+          <version>5.3.30</version> <!-- o la versione Spring che stai usando -->
+      </dependency>
+      <dependency>
+          <groupId>javax.mail</groupId>
+          <artifactId>mail</artifactId>
+          <version>1.4.7</version> <!-- o una versione compatibile -->
+      </dependency>
   </dependencies>
     <build>
         <pluginManagement>

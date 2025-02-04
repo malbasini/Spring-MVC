@@ -157,4 +157,5 @@ public interface CourseService {
     void deleteCourse(int id);
     void updateImagePath(String image, int id);
     User findByUsername(String username);
+    String getEmailByCourseIdAndAuthor(int courseId, String author);
 }

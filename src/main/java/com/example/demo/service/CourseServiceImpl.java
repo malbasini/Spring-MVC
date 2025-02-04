@@ -104,4 +104,8 @@ public class CourseServiceImpl implements CourseService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public String getEmailByCourseIdAndAuthor(int courseId, String author) {
+        return courseRepository.findCourseByAuthorAndId(author, courseId).getEmail();
+    }
 }

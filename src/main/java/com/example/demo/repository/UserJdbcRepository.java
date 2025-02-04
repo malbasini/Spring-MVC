@@ -11,16 +11,16 @@ public class UserJdbcRepository {
     @Autowired
     private UserRepository userRepository;
     @Transactional
-    public void createUserWithRole(String username, String password, String email, int roleId) {
+    public void createUserWithRole(String username, String fullname, String password, String email, int roleId) {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email già esistente!");
         }
         if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("Username già esistente!");
         }
-        String insertUserSQL = "INSERT INTO register (username, password, email, enabled) VALUES (?, ?, ?, ?)";
+        String insertUserSQL = "INSERT INTO register (username,fullname, password, email, enabled) VALUES (?, ?, ?, ?, ?)";
         try {
-            jdbcTemplate.update(insertUserSQL, username, password, email, true);
+            jdbcTemplate.update(insertUserSQL, username, fullname, password, email, true);
             Integer newUserId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
             String insertRoleSQL = "INSERT INTO register_roles (user_id, role_id) VALUES (?, ?)";
             jdbcTemplate.update(insertRoleSQL, newUserId, roleId);

@@ -60,11 +60,18 @@ public class AuthController {
     @RequestMapping(value = "/doRegister", method = RequestMethod.POST)
     public String doRegister(
             @RequestParam("username") String username,
+            @RequestParam("fullname") String fullname,
             @RequestParam("email") String email,
             @RequestParam("password") String password,
             @RequestParam("roleId") String role,
             Model model) {
             //Controlli
+
+            if (fullname.isEmpty()) {
+                model.addAttribute("errore", "Valorizzare il fullname");
+                return "security/register";
+            }
+
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 model.addAttribute("errore", "Valorizzare username, password ed email");
                 return "security/register";
@@ -83,7 +90,7 @@ public class AuthController {
             }
             // Qui invochiamo il servizio che crea l'utente e assegna il ruolo
             try {
-                userService.registerNewUser(username, password, email, role);
+                userService.registerNewUser(username,fullname, password, email, role);
                 model.addAttribute("message", "Registrazione effettuata con successo. Ora fai il login!");
                 return "security/register";
             } catch (Exception e) {

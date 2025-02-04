@@ -25,10 +25,10 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
     @Override
-    public void registerNewUser(String username, String password, String email, String roleName) {
+    public void registerNewUser(String username, String fullName, String password, String email, String roleName) {
         Role role = roleRepository.findByName(roleName);
         int roleId = role.getId();
-        userJdbcRepository.createUserWithRole(username,passwordEncoder.encode(password),email,roleId);
+        userJdbcRepository.createUserWithRole(username,fullName, passwordEncoder.encode(password),email,roleId);
     }
     public List<Role> getAllRole()
     {

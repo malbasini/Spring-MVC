@@ -2,6 +2,7 @@ package com.example.demo.controller;
 import com.example.demo.repository.SubscriptionRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CourseService;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.SubscriptionService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,8 @@ public class CourseController {
     private SubscriptionService subscriptionService;
     @Autowired
     private SubscriptionRepository subscriptionRepository;
+    @Autowired
+    private EmailService emailService;
     @Value("${upload.path:uploads}")
     private String uploadDir;
     // GET /courses -> listing di tutti i corsi con supporto a paginazione, ricerca e ordinamento
@@ -300,15 +303,16 @@ public class CourseController {
             String sqlDate = Date.valueOf(currentDate).toString();
             subscription.setPaymentDate(sqlDate);
             subscription.setVote(5);
-            int idSubscription = subscriptionService.saveSubscription(subscription);
-            model.addAttribute("message", "Iscrizione avvenuta con successo. Ora puoi consultare il corso acquistato");
+            try {
+                int idSubscription = subscriptionService.saveSubscription(subscription);
+                model.addAttribute("message", "Iscrizione avvenuta con successo. Ora puoi consultare il corso acquistato");
+            }
+            catch (Exception e) {
+                model.addAttribute("message", e.getMessage());
+            }
         }
         return "redirect:/courses/course/" + course.getId() + "/detail";
     }
-
-
-
-
     @GetMapping("/{idCourse}/vote")
     public String vote(@PathVariable("idCourse") Integer idCourse,Principal principal, Model model) {
         Course course = courseService.findById(idCourse);
@@ -327,9 +331,26 @@ public class CourseController {
         String loggedUsername = principal.getName(); // es: "mariorossi"
         Subscription subscription = subscriptionRepository.findByCourse_Id(idCourse);
         if(subscription != null) {
-            subscriptionService.subscriptionVote(subscription.getId(),vote);
-            model.addAttribute("message","Grazie per aver espresso la tua opinione sul corso");
-            return "redirect:/courses/course/" + course.getId() + "/detail";
+            try {
+                subscriptionService.subscriptionVote(subscription.getId(), vote);
+                model.addAttribute("message", "Grazie per aver espresso la tua opinione sul corso");
+                return "redirect:/courses/course/" + course.getId() + "/detail";
+            }
+            catch (Exception e) {
+                model.addAttribute("message", e.getMessage());
+                return "redirect:/courses/course/" + course.getId() + "/detail";
+            }
+        }
+        return "redirect:/courses/course/" + course.getId() + "/detail";
+    }
+    @GetMapping("/{courseId}/question")
+    public String getQuestion(@PathVariable("courseId") Integer courseId,Principal principal, Model model) {
+        Course course = courseService.findById(courseId);
+        String loggedUsername = principal.getName(); // es: "mariorossi"
+        Subscription subscription = subscriptionRepository.findByCourse_Id(courseId);
+        if(subscription != null) {
+            model.addAttribute("courses",course);
+            return "courses/question";
         }
         return "redirect:/courses/course/" + course.getId() + "/detail";
     }
@@ -337,13 +358,38 @@ public class CourseController {
 
 
 
-
-
-
-
-
-
-
+    @PostMapping("/{courseId}/sendquestion")
+    public String postQuestion(@PathVariable("courseId") Integer courseId,
+                               @RequestParam("question") String question,
+                               Principal principal,
+                               Model model) {
+        Course course = courseService.findById(courseId);
+        String email = courseService.getEmailByCourseIdAndAuthor(courseId,course.getAuthor());
+        if(question.isEmpty()||question.equals(null)) {
+            model.addAttribute("message","Domanda obbligatoria");
+            model.addAttribute("courses",course);
+            return "courses/question";
+        }
+        String loggedUsername = principal.getName(); // es: "mariorossi"
+        User user = courseService.findByUsername(loggedUsername);
+        Subscription subscription = subscriptionRepository.findByCourse_Id(courseId);
+        if(subscription != null) {
+            try {
+                emailService.sendSimpleEmail(
+                         email ,
+                        "Lo studente " + user.getFullname() + " ti ha inviato una domanda",
+                        question.trim()
+                );
+            }
+            catch (Exception e) {
+                model.addAttribute("message","Errore invio email " + e.getMessage());
+                return "redirect:/courses/course/" + course.getId() + "/detail";
+            }
+            model.addAttribute("message","Domanda inviata con successo");
+            return "redirect:/courses/course/" + course.getId() + "/detail";
+        }
+        return "redirect:/courses/course/" + course.getId() + "/detail";
+    }
 
 
 

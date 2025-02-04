@@ -68,7 +68,7 @@
                     <img src="${pageContext.request.contextPath}/resources/images/${course.imagePath}" alt="image" class="img-fluid course-image">
                 </c:if>
                 <c:if test="${subscription && isStudent}">
-                    <a class="btn btn-block btn-outline-secondary mt-3">Fai una domanda</a>
+                    <a href="${pageContext.request.contextPath}/courses/${course.id}/question" class="btn btn-block btn-outline-secondary mt-3">Fai una domanda</a>
                     <a href="${pageContext.request.contextPath}/courses/${course.id}/vote" class="btn btn-block btn-outline-secondary mt-3" data-bs-toggle="modal" data-bs-target="#voteModal">Valuta il corso</a>
                 </c:if>
             </aside>

@@ -25,19 +25,25 @@
 <section class="course-info">
   <form action="${pageContext.request.contextPath}/doRegister" method="post">
       <div class="row">
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-3">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Username</span>
               </div>
               <input type="text" class="form-control" placeholder="Username" name="username" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-3">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-sm6">Fullname</span>
+              </div>
+              <input type="text" class="form-control" placeholder="Full name" name="fullname" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+          </div>
+          <div class="input-group input-group-sm mb-3 col-md-3">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroup-sizing-sm1">Password</span>
               </div>
               <input type="password" class="form-control" placeholder="Password" name="password" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-3">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroup-sizing-sm2">Email</span>
               </div>

@@ -29,13 +29,17 @@ USE `MyCourse`;
 CREATE TABLE `register` (
     `id` int NOT NULL AUTO_INCREMENT,
     `username` varchar(100) NOT NULL,
+    `fullname` varchar(255) NOT NULL COMMENT 'Nome Completo',
     `password` varchar(100) NOT NULL,
-     `email` varchar(100) NOT NULL,
+    `email` varchar(100) NOT NULL,
     `enabled` tinyint(1) NOT NULL DEFAULT '1',
-     PRIMARY KEY (`id`),
+    PRIMARY KEY (`id`),
     UNIQUE KEY `IDX_EMAIL` (`email`),
     UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb3;
+
+
+
 
 CREATE TABLE `roles` (
   `id` int NOT NULL AUTO_INCREMENT,

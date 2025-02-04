@@ -16,6 +16,9 @@ public class User {
     private String username;
 
     @Column(nullable = false)
+    private String fullname;
+
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
@@ -80,4 +83,11 @@ public class User {
         this.roles = roles;
     }
 
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
 }
