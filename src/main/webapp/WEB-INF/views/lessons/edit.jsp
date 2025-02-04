@@ -14,11 +14,6 @@
       ${message}
   </div>
 </c:if>
-<c:if test="${empty message}">
-  <div class="alert alert-success" role="alert">
-      ${message}
-  </div>
-</c:if>
 <br>
 <section class="lesson-info">
   <form method="post" action="${pageContext.request.contextPath}/lessons/${lesson.id}/${lesson.course.id}">

@@ -244,9 +244,10 @@ public class LessonController {
         if (!lesson.equals(null)) {
             model.addAttribute("lesson", lesson);
             // gestisci errore se non trovato
-            return "lesson/edit";
+            return "/lessons/edit"; // JSP da mostrare";
+
         }
-        return "lessons/edit";
+        return "redirect:/lessons/edit";
     }
         // POST /lessons/{id} -> aggiornamento
     @PostMapping("/{id}/{courseId}")
@@ -254,7 +255,6 @@ public class LessonController {
                                @PathVariable("courseId") Integer courseId,
                                @ModelAttribute("lesson") Lesson updatedLesson,
                                Model model) {
-        // Manteniamo l'ID
         Lesson existing = lessonService.findById(id);
         Course course = courseService.findById(courseId);
         model.addAttribute("courseId", courseId);

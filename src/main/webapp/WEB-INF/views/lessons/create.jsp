@@ -13,11 +13,6 @@
             ${message}
     </div>
 </c:if>
-<c:if test="${empty message}">
-    <div class="alert alert-success" role="alert">
-            ${message}
-    </div>
-</c:if>
 <br>
 <h1>Crea Lezione</h1>
 <br>

@@ -243,22 +243,22 @@ public class CourseController {
         }
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("course", updatedCourse);
             return "redirect:/courses/" + updatedCourse.getId() + "/edit"; // JSP da mostrare
         }
         String imagePath = courseService.findById(id).getImagePath();
-        // Validazioni
-        String message = validazioni(updatedCourse,model);
-        if(message != null) {
-            model.addAttribute("message", message);
-            updatedCourse.setCurrentPriceCurrency("EUR");
-            updatedCourse.setFullPriceCurrency("EUR");
-            updatedCourse.setImagePath(imagePath);
-            return "redirect:/courses/" + updatedCourse.getId() + "/edit";
-        }
          // Assicuriamoci che l'ID coincida
         updatedCourse.setId(id);
         try{
             courseService.updateCourse(updatedCourse);
+            String message = validazioni(updatedCourse,model);
+            if(message != null) {
+                model.addAttribute("message", message);
+                updatedCourse.setCurrentPriceCurrency("EUR");
+                updatedCourse.setFullPriceCurrency("EUR");
+                updatedCourse.setImagePath(imagePath);
+                return "redirect:/courses/" + updatedCourse.getId() + "/edit";
+            }
             model.addAttribute("message", "Course updated successfully");
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
@@ -386,15 +386,6 @@ public class CourseController {
         }
         return "redirect:/courses/course/" + course.getId() + "/detail";
     }
-
-
-
-
-
-
-
-
-
     // Calcola la durata totale di una lista di lezioni
     private Duration calculateTotalDuration(List<Lesson> lessons) {
         return lessons.stream()
@@ -454,7 +445,7 @@ public class CourseController {
     public String validazioni(Course course, Model model)
     {
         String cleanedText = "";
-        if(course.getDescription()!=null) {
+        if(course.getDescription()!=null || !course.getDescription().isEmpty()) {
             cleanedText = course.getDescription().replaceAll("<[^>]*>", " ").trim();
         }
         else
@@ -485,6 +476,10 @@ public class CourseController {
         if((course.getCurrentPriceAmount().compareTo(course.getFullPriceAmount())) > 0) {
            model.addAttribute("message", "prezzo scontato maggiore del prezzo intero");
            return "prezzo scontato maggiore del prezzo intero";
+        }
+        if(cleanedText.isEmpty()||cleanedText.equals(null)) {
+            model.addAttribute("message", "Descrizione obbligatoria");
+            return "Descrizione obbligatoria";
         }
         return null;
     }
