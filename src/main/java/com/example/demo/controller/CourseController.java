@@ -6,6 +6,9 @@ import com.example.demo.service.EmailService;
 import com.example.demo.service.SubscriptionService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -76,7 +79,6 @@ public class CourseController {
         {
             model.addAttribute("isTeacher",true);
         }
-
         // Ottenere i corsi con paginazione, ricerca e ordinamento
         Page<Course> courses = courseService.findCourses(page, size, title, sortBy, sortDirection);
 
