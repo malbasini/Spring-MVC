@@ -16,8 +16,8 @@ public class MailConfig {
         // Imposta i valori per Mailtrap
         mailSender.setHost("sandbox.smtp.mailtrap.io");
         mailSender.setPort(2525);
-        mailSender.setUsername("d8fa39dfb8c174");
-        mailSender.setPassword("4825d478f84b82");
+        mailSender.setUsername("TUO USERNAME MAILTRAP");
+        mailSender.setPassword("TUA PASSWORD MAILTRAP");
         return mailSender;
     }
 }
