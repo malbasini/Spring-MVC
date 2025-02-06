@@ -67,6 +67,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscription.setPaidCurrency(currency);
         subscription.setPaymentType(paymentType);
         subscription.setTransactionId(transactionId);
+        subscription.setVote(1);
         int subscriptionId = subscriptionJdbcRepository.saveSubscription(subscription);
         Optional<Subscription> savedSubscription = subscriptionRepository.findById(subscriptionId);
         return savedSubscription.orElse(null);
