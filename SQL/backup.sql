@@ -203,7 +203,7 @@ CREATE TABLE `Subscription` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-DELIMITER ;;
+DELIMITER ;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `Subscription_AFTER_UPDATE` AFTER UPDATE ON `subscription` FOR EACH ROW BEGIN
 IF NEW.Vote <> OLD.Vote THEN
         UPDATE Courses
@@ -214,7 +214,7 @@ IF NEW.Vote <> OLD.Vote THEN
         )
         WHERE Id = NEW.CourseId;
     END IF;
-END */;;
+END */;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
