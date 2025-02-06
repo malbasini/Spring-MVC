@@ -183,39 +183,26 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `Subscription`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `Subscription` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `UserId` int NOT NULL,
-  `CourseId` int NOT NULL,
-  `PaymentDate` varchar(45) NOT NULL,
-  `PaidAmount` decimal(18,2) NOT NULL,
-  `Vote` int DEFAULT '5',
-  PRIMARY KEY (`Id`),
-  KEY `Subscription_iduser_register_id_idx` (`UserId`),
-  KEY `Subscription_Course_id_Course_id_idx` (`CourseId`),
-  CONSTRAINT `FK79qa3fyeyqbgqwcmu3lirp2ru` FOREIGN KEY (`CourseId`) REFERENCES `Courses` (`Id`),
-  CONSTRAINT `Subscription_Course_id_Course_id` FOREIGN KEY (`CourseId`) REFERENCES `Courses` (`Id`),
-  CONSTRAINT `Subscription_iduser_register_id` FOREIGN KEY (`UserId`) REFERENCES `register` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+        `Id` int NOT NULL AUTO_INCREMENT,
+        `UserId` int NOT NULL,
+        `CourseId` int NOT NULL,
+        `PaymentDate` datetime NOT NULL,
+        `PaidAmount` decimal(18,2) NOT NULL,
+        `PaidCurrency` varchar(45) NOT NULL DEFAULT 'EUR',
+        `PaymentType` varchar(450) NOT NULL DEFAULT 'PAYPAL',
+        `TransactionId` varchar(450) DEFAULT NULL,
+        `Vote` int DEFAULT '1',
+        PRIMARY KEY (`Id`),
+        KEY `Subscription_iduser_register_id_idx` (`UserId`),
+        KEY `Subscription_Course_id_Course_id_idx` (`CourseId`),
+        CONSTRAINT `FK79qa3fyeyqbgqwcmu3lirp2ru` FOREIGN KEY (`CourseId`) REFERENCES `Courses` (`Id`),
+         CONSTRAINT `Subscription_Course_id_Course_id` FOREIGN KEY (`CourseId`) REFERENCES `Courses` (`Id`),
+        CONSTRAINT `Subscription_iduser_register_id` FOREIGN KEY (`UserId`) REFERENCES `register` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `Subscription`
---
-
-LOCK TABLES `Subscription` WRITE;
-/*!40000 ALTER TABLE `Subscription` DISABLE KEYS */;
-INSERT INTO `Subscription` VALUES (1,80,425,'2025-02-04',11.99,5),(2,80,32,'2025-02-04',12.99,5);
-/*!40000 ALTER TABLE `Subscription` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `Subscription_AFTER_UPDATE` AFTER UPDATE ON `subscription` FOR EACH ROW BEGIN
 IF NEW.Vote <> OLD.Vote THEN
