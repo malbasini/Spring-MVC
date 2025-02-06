@@ -15,13 +15,12 @@ public class CourseJdbcRepository {
     private JdbcTemplate jdbcTemplate;
     @Transactional
     public int updateCourse(Course course) {
-        course.setRating(BigDecimal.valueOf(1.0));
+
         String sql = "UPDATE Courses " +
                 "SET Title = ?, " +
                 "Description = ?, " +
                 "Author = ?, " +
                 "Email = ?, " +
-                "Rating = ?, " +
                 "FullPrice_Amount = ?, " +
                 "FullPrice_Currency = ?, " +
                 "CurrentPrice_Amount = ?, " +
@@ -35,7 +34,6 @@ public class CourseJdbcRepository {
                 course.getDescription(),
                 course.getAuthor(),
                 course.getEmail(),
-                course.getRating(),
                 course.getFullPriceAmount(),
                 "EUR",
                 course.getCurrentPriceAmount(),

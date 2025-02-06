@@ -28,23 +28,12 @@ public class PayPalConfig {
         return clientId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
     public String getClientSecret() {
         return clientSecret;
-    }
-
-    public void setClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
     }
 
     public String getMode() {
         return mode;
     }
 
-    public void setMode(String mode) {
-        this.mode = mode;
-    }
 }

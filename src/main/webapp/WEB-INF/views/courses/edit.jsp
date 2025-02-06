@@ -88,10 +88,10 @@
                         <label>Immagine</label>
                         <div class="input-group">
                                 <c:if test="${fn:contains(course.imagePath, 'uploads')}">
-                                    <img id="imagePath" name="imagePath" src="${pageContext.request.contextPath}${course.imagePath}" alt="image" class="img-fluid course-image"">
+                                    <img id="imagePath" name="imagePath" src="${pageContext.request.contextPath}${course.imagePath}" alt="image" class="img-fluid course-image">
                                 </c:if>
                                 <c:if test="${not fn:contains(course.imagePath, 'uploads')}">
-                                    <img id="imagePath" name="imagePath" src="${pageContext.request.contextPath}/resources/images/${course.imagePath}" alt="image" class="img-fluid course-image">
+                                    <img id="imagePath" name="imagePath" src="${pageContext.request.contextPath}/static/images/${course.imagePath}" alt="image" class="img-fluid course-image">
                                 </c:if>
                         </div>
                     </div>
