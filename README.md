@@ -5,9 +5,9 @@ Modifica il file WebMvcConfig nel metodo addResourceHandlers in modo che il perc
 
 PER CREARE IL CLIENT_ID E LA SECRET_KEY DI PAYPAL SEGUIRE QUESTE ISTRUZIONI:
 
-Accedi alla dashboard di paypal al seguente indirizzo: [](https://developer.paypal.com/home/)
+Accedi alla dashboard di paypal al seguente indirizzo: https://developer.paypal.com/home/
 Crea una nuova app con utente businesss (il venditore) copia il Client ID e la Secret nel file application.properties. Assicurati che la modalità sia sandbox. Dopo aver creato un utente business per l'app devi creare un utente client (colui che acquista il corso) seleziona la tua app, vai sul menù Testing Tools e crea un account personal. Questo account ti permetterà di acquistare i corsi.
 
 PER CREARE LA SECRET_KEY DI STRIPE SEGUIRE QUESTE ISTRUZIONI:
 
-Accedi alla dashboard di stripe al seguente indirizzo, registrati se necessario:[](https://dashboard.stripe.com/test/apikeys) ottieni la tua chiave privata e copiala nel file application.properties.
+Accedi alla dashboard di stripe al seguente indirizzo, registrati se necessario: https://dashboard.stripe.com/test/apikeys ottieni la tua chiave privata e copiala nel file application.properties.
