@@ -90,4 +90,5 @@ public class User {
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
+
 }

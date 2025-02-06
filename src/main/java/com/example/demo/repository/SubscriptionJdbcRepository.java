@@ -16,8 +16,8 @@ public class SubscriptionJdbcRepository {
     @Transactional
     public int saveSubscription(Subscription subscription) {
         try {
-            String sql = "INSERT INTO Subscription (UserId, CourseId, PaymentDate, PaidAmount,Vote) VALUES (?,?,?,?,?)";
-            jdbcTemplate.update(sql, subscription.getUser().getId(), subscription.getCourse().getId(), subscription.getPaymentDate(), subscription.getPaidAmount(), subscription.getVote());
+            String sql = "INSERT INTO Subscription (UserId, CourseId, PaymentDate, PaidAmount, PaidCurrency, PaymentType, TransactionId, Vote) VALUES (?,?,?,?,?,?,?,?)";
+            jdbcTemplate.update(sql, subscription.getUser().getId(), subscription.getCourse().getId(), subscription.getPaymentDate(), subscription.getPaidAmount(), subscription.getPaidCurrency(), subscription.getPaymentType(),subscription.getTransactionId(),subscription.getVote());
             Integer subscriptionId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
             return subscriptionId;
         }catch (Exception e) {

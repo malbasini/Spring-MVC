@@ -17,8 +17,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:/Users/malbasini/.SmartTomcat/MyCourse/MyCourse/uploads/");
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/uploads/**").addResourceLocations("file:/Users/malbasini/.SmartTomcat/MyCourse/MyCourse/uploads/");
     }
     // Opzionale: Configura la mappatura della home senza controller
     @Override

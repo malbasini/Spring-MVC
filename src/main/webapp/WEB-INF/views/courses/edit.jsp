@@ -114,11 +114,11 @@
                                 <input type="hidden" value="${pageContext.request.contextPath}${course.imagePath}">
                                 <img id="preview" src=src="${pageContext.request.contextPath}${course.imagePath}">
                             </div>
-                            <div class="custom-file mt-3">
-                                <input type="file" name="imageFile" id="imageFile" class="custom-file-input btn btn-warning" src="${pageContext.request.contextPath}${course.imagePath}" onchange="updatePreview(this)">
+                            <div class="form-group">
+                                <input type="file" id="imageFile" name="imageFile" class="btn btn-success" src="${pageContext.request.contextPath}${course.imagePath}" onchange="updatePreview(this)" />
                                 <br>
                                 <br>
-                                <button type="submit" class="btn btn-secondary">Carica</button>
+                                <button type="submit" id="btnUpload" value="Upload Files" class="btn btn-warning"><i class="fas fa-cog"></i>Upload</button>
                             </div>
                         </div>
                     </c:if>&nbsp;

@@ -169,6 +169,9 @@ public class CourseController {
         Duration totalDuration = calculateTotalDuration(course.getLessons());
         model.addAttribute("course", course);
         model.addAttribute("totalDuration", formatDuration(totalDuration));
+        //ricavo se il provider dei pagamenti è paypal o stripe
+        String pymentProvider = subscriptionService.getPaymentType();
+        model.addAttribute("provider", pymentProvider);
         return "courses/detail"; // JSP da mostrare
 
     }
@@ -230,20 +233,16 @@ public class CourseController {
         String loggedUsername = principal.getName(); // es: "mariorossi"
         if (idUser != null)
         {
-            Optional<User> optionalUser = userRepository.findById(idUser);
-            if (optionalUser.isPresent()) {
-                User user = optionalUser.get();
-                // Verifico se il proprietario del corso è lo stesso che ha fatto login
-                if (!user.getUsername().equals(loggedUsername)) {
+            User user = userRepository.findByUsername(loggedUsername);
+            // Verifico se il proprietario del corso è lo stesso che ha fatto login
+            if (!user.getUsername().equals(loggedUsername)) {
                     // se non sei il proprietario, redirect o errore
-                    return "security/access-denied";
-                }
-                else {
-                   updatedCourse.setUserOwner(user);
-                }
+                return "security/access-denied";
+            }
+            else {
+                updatedCourse.setUserOwner(user);
             }
         }
-
         if (bindingResult.hasErrors()) {
             model.addAttribute("course", updatedCourse);
             return "redirect:/courses/" + updatedCourse.getId() + "/edit"; // JSP da mostrare
@@ -289,6 +288,7 @@ public class CourseController {
         courseService.deleteCourse(id);
         return "redirect:/courses";
     }
+    /*
     @PostMapping("/{courseId}/{userId}/subscription")
     public String Subscription(@PathVariable("courseId") Integer courseId, @PathVariable("userId") Integer userId, Principal principal,Model model) {
         Course course = courseService.findById(courseId);
@@ -302,11 +302,18 @@ public class CourseController {
             // Oppure ottieni data e ora completa
             LocalDateTime currentDateTime = LocalDateTime.now();
             // Se hai bisogno di una data SQL (es. per Database)
-            String sqlDate = Date.valueOf(currentDate).toString();
+            Date sqlDate = Date.valueOf(currentDate);
             subscription.setPaymentDate(sqlDate);
-            subscription.setVote(5);
+            subscription.setVote(1);
             try {
-                int idSubscription = subscriptionService.saveSubscription(subscription);
+                int idSubscription = subscriptionService.createSubscription(
+                        userId,
+                        courseId,
+                        course.getCurrentPriceAmount(),
+                        "EUR",
+                        "PAYPAL",
+                        null,
+                );
                 model.addAttribute("message", "Iscrizione avvenuta con successo. Ora puoi consultare il corso acquistato");
             }
             catch (Exception e) {
@@ -315,6 +322,7 @@ public class CourseController {
         }
         return "redirect:/courses/course/" + course.getId() + "/detail";
     }
+    */
     @GetMapping("/{idCourse}/vote")
     public String vote(@PathVariable("idCourse") Integer idCourse,Principal principal, Model model) {
         Course course = courseService.findById(idCourse);

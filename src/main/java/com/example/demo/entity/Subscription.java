@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "Subscription")
@@ -20,19 +21,30 @@ public class Subscription {
     @JoinColumn(name = "CourseId", referencedColumnName = "id", nullable = false)
     private Course course;
 
-    @Column(name = "PaymentDate", length = 45)
-    private String paymentDate;
+    @Column(name = "PaymentDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date paymentDate;
 
     @Column(name = "PaidAmount", precision = 18, scale = 2)
     private BigDecimal paidAmount;
 
+    @Column(name = "PaidCurrency")
+    private String paidCurrency;
+
+    @Column(name = "PaymentType")
+    private String paymentType; // "PAYPAL" o "STRIPE"
+
+    @Column(name = "TransactionId")
+    private String transactionId;
+
     @Column(name = "Vote")
-    private Integer vote;
+    private Integer vote; // opzionale se vuoi memorizzare un voto
 
     // Getters and Setters
     public Integer getId() {
         return id;
     }
+
 
     public void setId(Integer id) {
         this.id = id;
@@ -54,11 +66,11 @@ public class Subscription {
         this.course = course;
     }
 
-    public String getPaymentDate() {
+    public Date getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(String paymentDate) {
+    public void setPaymentDate(Date paymentDate) {
         this.paymentDate = paymentDate;
     }
 
@@ -70,23 +82,35 @@ public class Subscription {
         this.paidAmount = paidAmount;
     }
 
+    public String getPaidCurrency() {
+        return paidCurrency;
+    }
+
+    public void setPaidCurrency(String paidCurrency) {
+        this.paidCurrency = paidCurrency;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
     public Integer getVote() {
         return vote;
     }
 
     public void setVote(Integer vote) {
         this.vote = vote;
-    }
-
-    @Override
-    public String toString() {
-        return "Subscription{" +
-                "id=" + id +
-                ", user=" + user +
-                ", course=" + course +
-                ", paymentDate='" + paymentDate + '\'' +
-                ", paidAmount=" + paidAmount +
-                ", vote=" + vote +
-                '}';
     }
 }

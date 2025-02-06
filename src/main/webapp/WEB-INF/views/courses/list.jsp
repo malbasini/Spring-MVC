@@ -74,7 +74,7 @@
                     <img src="${pageContext.request.contextPath}${course.imagePath}" alt="image" width="52" height="52">
                 </c:if>
                 <c:if test="${not fn:contains(course.imagePath, 'uploads')}">
-                    <img src="${pageContext.request.contextPath}/resources/images/${course.imagePath}" alt="image" width="52" height="52">
+                    <img src="${pageContext.request.contextPath}/static/images/${course.imagePath}" alt="image" width="52" height="52">
                 </c:if>
             </div>
             <div class="col-md-5">

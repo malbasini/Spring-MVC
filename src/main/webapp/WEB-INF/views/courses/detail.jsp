@@ -26,9 +26,16 @@
                 <a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/courses/${course.id}/edit">Modifica</a>&nbsp;&nbsp;&nbsp;
             </c:if>&nbsp;
             <c:if test="${isStudent && not subscription}">
-                <form action="${pageContext.request.contextPath}/courses/${course.id}/${course.userOwner.id}/subscription" method="post">
-                     <button type="submit" class="btn btn-warning btn-bloc">Iscriviti</button>
-                </form>
+                <c:if test="${provider eq 'paypal'}">
+                    <form action="${pageContext.request.contextPath}/paypal/${course.id}/pay" method="get">
+                        <button type="submit" class="btn btn-warning btn-bloc">Iscriviti</button>
+                    </form>
+                </c:if>
+                <c:if test="${provider eq 'stripe'}">
+                    <form action="${pageContext.request.contextPath}/stripe/${course.id}/checkout" method="get">
+                         <button type="submit" class="btn btn-warning btn-bloc">Iscriviti</button>
+                    </form>
+                </c:if>
             </c:if>&nbsp;
         </div>
     </div>
@@ -65,7 +72,7 @@
                     <img src="${pageContext.request.contextPath}${course.imagePath}" alt="image" class="img-fluid course-image">
                 </c:if>
                 <c:if test="${not fn:contains(course.imagePath, 'upload')}">
-                    <img src="${pageContext.request.contextPath}/resources/images/${course.imagePath}" alt="image" class="img-fluid course-image">
+                    <img src="${pageContext.request.contextPath}/static/images/${course.imagePath}" alt="image" class="img-fluid course-image">
                 </c:if>
                 <c:if test="${subscription && isStudent}">
                     <a href="${pageContext.request.contextPath}/courses/${course.id}/question" class="btn btn-block btn-outline-secondary mt-3">Fai una domanda</a>
