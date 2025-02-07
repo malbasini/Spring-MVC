@@ -11,3 +11,8 @@ Crea una nuova app con utente businesss (il venditore) copia il Client ID e la S
 PER CREARE LA SECRET_KEY DI STRIPE SEGUIRE QUESTE ISTRUZIONI:
 
 Accedi alla dashboard di stripe al seguente indirizzo, registrati se necessario: https://dashboard.stripe.com/test/apikeys ottieni la tua chiave privata e copiala nel file application.properties.
+
+
+IMPLEMENTARE IL RECAPTCHA DI GOOGLE
+
+Accedi a Google reCAPTCHA Admin Console. Registra un nuovo sito, assicurati che la versione sia V2. Come dominio inserisci localhost, copia il sitekey e il secretkey dentro il file application.properties.
