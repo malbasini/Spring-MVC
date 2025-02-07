@@ -14,6 +14,12 @@
     </div>
 </c:if>
 <br>
+<c:if test="${not empty error}">
+    <div class="alert alert-danger" role="alert">
+            ${error}
+    </div>
+</c:if>
+<br>
 <h1>Crea Lezione</h1>
 <br>
 <form method="post" action="${pageContext.request.contextPath}/lessons">
@@ -27,6 +33,13 @@
         </div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary btn-lg btn-block">Crea lezione</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-8">
+            <div class="g-recaptcha" data-sitekey="${sitetkey}"></div>
         </div>
     </div>
 </form>

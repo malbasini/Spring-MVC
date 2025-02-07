@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 import com.example.demo.repository.SubscriptionRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.CourseService;
-import com.example.demo.service.EmailService;
-import com.example.demo.service.SubscriptionService;
-import com.example.demo.service.UserService;
+import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -49,6 +46,8 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/courses")
 public class CourseController {
+    @Autowired
+    private CaptchaValidator captchaValidator;
     @Autowired
     private CourseService courseService;
     @Autowired
@@ -97,22 +96,32 @@ public class CourseController {
     @GetMapping("/new")
     @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     public String showCreateForm(Model model) {
+        model.addAttribute("sitetkey", captchaValidator.getSiteKey());
         model.addAttribute("course", new Course());
         return "courses/create"; // JSP da mostrare
     }
     // POST /courses -> salva un nuovo corso
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_TEACHER')")
-    public String create(@Valid @ModelAttribute("course") Course course
-            ,BindingResult bindingResult, Model model,Authentication authentication) {
-
+    public String create(@Valid @ModelAttribute("course") Course course,
+                         BindingResult bindingResult,
+                         @RequestParam("g-recaptcha-response") String captchaResponse,
+                         Model model,
+                         Authentication authentication) {
 
         String username = authentication.getName();  // lo username loggato
         User user = courseService.findByUsername(username);
-
         // Imposta l'utente proprietario
         course.setUserOwner(user);
 
+        boolean isCaptchaValid = captchaValidator.verifyCaptcha(captchaResponse);
+        if (!isCaptchaValid) {
+            model.addAttribute("error", "Captcha non valido. Riprova.");
+            model.addAttribute("course", course);
+            model.addAttribute("sitetkey", captchaValidator.getSiteKey());
+            return "courses/create";// Torna alla pagina del form
+        }
+        model.addAttribute("sitetkey", captchaValidator.getSiteKey());
         if(course.getTitle()==null || course.getTitle().isEmpty()){
             model.addAttribute("message", "Il titolo è obbligatorio");
             return "courses/create";

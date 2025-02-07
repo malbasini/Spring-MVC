@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+import com.example.demo.service.CaptchaValidator;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,6 +185,8 @@ le pagine HTML (`lesson/form`, `lessons/list`).
 @RequestMapping("/lessons")
 public class LessonController {
     @Autowired
+    private CaptchaValidator captchaValidator;
+    @Autowired
     private LessonService lessonService;
     @Autowired
     private CourseService courseService;
@@ -207,17 +210,27 @@ public class LessonController {
         lesson.setCourse(course);
         model.addAttribute("lesson", lesson);
         model.addAttribute("courseId", courseId);
+        model.addAttribute("sitetkey", captchaValidator.getSiteKey());
         return "lessons/create";
     }
     // POST /lessons -> creazione (salvataggio) della lezione
     @PostMapping
     public String createLesson(@ModelAttribute("lesson") Lesson lesson,
                                @RequestParam("courseId") Integer courseId,
+                               @RequestParam("g-recaptcha-response") String captchaResponse,
                                Model model) {
         // Associa la lezione al corso
         Course course = courseService.findById(courseId);
         model.addAttribute("courseId", courseId);
         lesson.setCourse(course);
+        boolean isCaptchaValid = captchaValidator.verifyCaptcha(captchaResponse);
+        if (!isCaptchaValid) {
+            model.addAttribute("error", "Captcha non valido. Riprova.");
+            model.addAttribute("sitetkey", captchaValidator.getSiteKey());
+            model.addAttribute("lesson", lesson);
+            return "lessons/create";// Torna alla pagina del form
+        }
+        model.addAttribute("sitetkey", captchaValidator.getSiteKey());
         if(lesson.getTitle().isEmpty()|| lesson.getTitle() == null) {
             model.addAttribute("message", "Il Titolo è obbligatorio");
             return "lessons/create"; // JSP da mostrare

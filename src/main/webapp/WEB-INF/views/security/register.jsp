@@ -19,6 +19,11 @@
             ${message}
     </div>
 </c:if>
+<c:if test="${not empty error}">
+    <div class="alert alert-danger" role="alert">
+            ${error}
+    </div>
+</c:if>
 <br>
 <h2>Registrati</h2>
 <br>
@@ -64,6 +69,13 @@
              <div class="input-group input-group-sm mb-3 col-md-4">
                  <button type="submit" class="btn btn-outline-secondary">Registrati</button>
              </div>
+      </div>
+      <br>
+      <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-8">
+              <div class="g-recaptcha" data-sitekey="${sitetkey}"></div>
+          </div>
       </div>
   </form>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

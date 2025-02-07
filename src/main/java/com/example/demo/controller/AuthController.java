@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
+import com.example.demo.service.CaptchaValidator;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AuthController {
+    @Autowired
+    private CaptchaValidator captchaValidator;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
     @Autowired
@@ -54,6 +57,7 @@ public class AuthController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String showRegisterPage(Model model) {
+        model.addAttribute("sitetkey", captchaValidator.getSiteKey());
         return "security/register"; // restituisce la JSP register.jsp
     }
 
@@ -64,14 +68,25 @@ public class AuthController {
             @RequestParam("email") String email,
             @RequestParam("password") String password,
             @RequestParam("roleId") String role,
+            @RequestParam("g-recaptcha-response") String captchaResponse,
             Model model) {
             //Controlli
-
+            boolean isCaptchaValid = captchaValidator.verifyCaptcha(captchaResponse);
+            if (!isCaptchaValid) {
+                model.addAttribute("error", "Captcha non valido. Riprova.");
+                model.addAttribute("sitetkey", captchaValidator.getSiteKey());
+                model.addAttribute("username", username);
+                model.addAttribute("fullname", fullname);
+                model.addAttribute("email", email);
+                model.addAttribute("password", password);
+                model.addAttribute("role", role);
+                return "security/register";// Torna alla pagina del form
+            }
+            model.addAttribute("sitetkey", captchaValidator.getSiteKey());
             if (fullname.isEmpty()) {
                 model.addAttribute("errore", "Valorizzare il fullname");
                 return "security/register";
             }
-
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 model.addAttribute("errore", "Valorizzare username, password ed email");
                 return "security/register";

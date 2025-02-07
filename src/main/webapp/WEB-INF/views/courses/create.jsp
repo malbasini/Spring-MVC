@@ -12,6 +12,11 @@
             ${message1}
     </div>
 </c:if>
+<c:if test="${not empty error}">
+    <div class="alert alert-danger" role="alert">
+            ${error}
+    </div>
+</c:if>
 <br>
 <h1>Crea nuovo corso</h1>
 <br>
@@ -26,6 +31,13 @@
         </div>
         <div class="col-md-4">
             <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fas fa-rocket"></i> Crea corso!</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-8">
+            <div class="g-recaptcha" data-sitekey="${sitetkey}"></div>
         </div>
     </div>
 </form>
