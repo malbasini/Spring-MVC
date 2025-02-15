@@ -9,8 +9,8 @@
 -- ------------------------------------------------------
 -- Server version	8.0.40
 
-CREATE DATABASE  IF NOT EXISTS `MyCourse` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `MyCourse`;
+CREATE DATABASE  IF NOT EXISTS `MyCourseMvc` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `MyCourseMvc`;
 
 --
 -- Table structure for table `register`
