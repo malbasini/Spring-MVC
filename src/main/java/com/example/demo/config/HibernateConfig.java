@@ -189,7 +189,7 @@ public class HibernateConfig {
         } catch (PropertyVetoException e) {
             throw new RuntimeException("Errore nella configurazione del driver", e);
         }
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/MyCourse");
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/MyCourseMvc");
         dataSource.setUser("root");
         dataSource.setPassword("KHJuial0a100?");
 

@@ -31,9 +31,10 @@ public class SecurityConfig {
                 .frameOptions().sameOrigin()
                 .and()// or disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/doRegister","/doLogin").permitAll() // Rotte pubbliche
-                .antMatchers("/teacher/**").hasRole("TEACHER") // Accesso ristretto ai docenti
-                .antMatchers("/student/**").hasRole("STUDENT")
+                .requestMatchers("/login", "/register", "/doRegister","/doLogin").permitAll() // Rotte pubbliche
+                .requestMatchers("/teacher/**").hasRole("TEACHER") // Accesso ristretto ai docenti
+                .requestMatchers("/student/**").hasRole("STUDENT")
+                .requestMatchers("/resources/**", "/static/**", "/public/**").permitAll()
                 .anyRequest().authenticated() // Tutto il resto richiede autenticazione
                 .and()
                 .formLogin()
@@ -76,4 +77,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-

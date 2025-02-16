@@ -9,67 +9,98 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <!-- Alert Condizionale -->
 <br>
-<c:if test="${not empty errore}">
-    <div class="alert alert-danger" role="alert">
-            ${errore}
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <c:if test="${not empty errore}">
+            <div class="alert alert-danger" role="alert">
+                    ${errore}
+            </div>
+        </c:if>
     </div>
-</c:if>
-<c:if test="${not empty message}">
-    <div class="alert alert-success" role="alert">
-            ${message}
+    <div class="col-md-4"></div>
+</div>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <c:if test="${not empty message}">
+            <div class="alert alert-success" role="alert">
+                    ${message}
+            </div>
+        </c:if>
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger" role="alert">
+                    ${error}
+            </div>
+        </c:if>
     </div>
-</c:if>
-<c:if test="${not empty error}">
-    <div class="alert alert-danger" role="alert">
-            ${error}
-    </div>
-</c:if>
+    <div class="col-md-4"></div>
+</div>
 <br>
-<h2>Registrati</h2>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <h2>Registrati</h2>
+    </div>
+    <div class="col-md-4"></div>
+</div>
 <br>
 <section class="course-info">
   <form action="${pageContext.request.contextPath}/doRegister" method="post">
       <div class="row">
-          <div class="input-group input-group-sm mb-3 col-md-3">
-              <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Username</span>
-              </div>
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+              <span class="input-group-text" id="inputGroup-sizing-sm1">Username</span>
+              <br>
               <input type="text" class="form-control" placeholder="Username" name="username" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-3">
-              <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-sm6">Fullname</span>
-              </div>
+          <div class="col-md-4"></div>
+      </div>
+      <br>
+      <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+              <span class="input-group-text" id="inputGroup-sizing-sm2">Nome Completo</span>
+              <br>
               <input type="text" class="form-control" placeholder="Full name" name="fullname" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-3">
-              <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-sm1">Password</span>
-              </div>
+          <div class="col-md-4"></div>
+      </div>
+      <br>
+      <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+              <span class="input-group-text" id="inputGroup-sizing-sm3">Password</span>
+              <br>
               <input type="password" class="form-control" placeholder="Password" name="password" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-3">
-              <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-sm2">Email</span>
-              </div>
+          <div class="col-md-4"></div>
+      </div>
+      <br>
+      <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+              <span class="input-group-text" id="inputGroup-sizing-sm4">Email</span>
+              <br>
               <input type="email" class="form-control" placeholder="Email" name="email" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
           </div>
+          <div class="col-md-4"></div>
       </div>
+      <br>
       <div class="row">
-          <div class="input-group input-group-sm mb-3 col-md-4">
-              <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-sm3">Ruolo</span>
-                  <select class="form-select form-select-sm" name="roleId" aria-label="Small select example">
-                      <option selected>Open this select menu</option>
-                      <option value="ROLE_TEACHER">ROLE_TEACHER</option>
-                      <option value="ROLE_STUDENT">ROLE_STUDENT</option>
-                  </select>
-             </div>
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+              <span class="input-group-text" id="inputGroup-sizing-sm5">Ruolo</span>
+              <br>
+              <select class="form-select form-select-sm" name="roleId" aria-label="Small select example">
+                  <option value="selected Open this select menu"></option>
+                  <option value="ROLE_TEACHER">ROLE_TEACHER</option>
+                  <option value="ROLE_STUDENT">ROLE_STUDENT</option>
+              </select>
           </div>
-             <div class="input-group input-group-sm mb-3 col-md-4">
-                 <button type="submit" class="btn btn-outline-secondary">Registrati</button>
-             </div>
+          <div class="col-md-4"></div>
       </div>
+      <br>
       <br>
       <div class="row">
           <div class="col-md-4"></div>
@@ -77,9 +108,18 @@
               <div class="g-recaptcha" data-sitekey="${sitetkey}"></div>
           </div>
       </div>
+      <br>
+      <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+              <br>
+              <button type="submit"  class="btn btn-primary">Registrati</button>
+          </div>
+          <div class="col-md-4"></div>
+      </div>
   </form>
-<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </section>
+<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 
 
 
