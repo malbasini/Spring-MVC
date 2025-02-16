@@ -44,9 +44,11 @@
             <sec:authorize access="!isAuthenticated()">
                 <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
             </sec:authorize>
+            <sec:authorize access="!isAuthenticated()">
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/register">Registrati</a>
             </li>
+            </sec:authorize>
         </ul>
     </div>
 </nav>
