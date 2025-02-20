@@ -52,7 +52,7 @@
           <div class="col-md-4">
               <span class="input-group-text" id="inputGroup-sizing-sm1">Username</span>
               <br>
-              <input type="text" class="form-control" placeholder="Username" name="username" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+              <input type="text" class="form-control" placeholder="Username" value="${username}" name="username" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
           </div>
           <div class="col-md-4"></div>
       </div>
@@ -62,7 +62,7 @@
           <div class="col-md-4">
               <span class="input-group-text" id="inputGroup-sizing-sm2">Nome Completo</span>
               <br>
-              <input type="text" class="form-control" placeholder="Full name" name="fullname" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+              <input type="text" class="form-control" placeholder="Full name" name="fullname" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="${fullname}">
           </div>
           <div class="col-md-4"></div>
       </div>
@@ -72,7 +72,7 @@
           <div class="col-md-4">
               <span class="input-group-text" id="inputGroup-sizing-sm3">Password</span>
               <br>
-              <input type="password" class="form-control" placeholder="Password" name="password" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+              <input type="password" class="form-control" placeholder="Password" name="password" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="${password}">
           </div>
           <div class="col-md-4"></div>
       </div>
@@ -82,7 +82,7 @@
           <div class="col-md-4">
               <span class="input-group-text" id="inputGroup-sizing-sm4">Email</span>
               <br>
-              <input type="email" class="form-control" placeholder="Email" name="email" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+              <input type="email" class="form-control" placeholder="Email" name="email" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="${email}">
           </div>
           <div class="col-md-4"></div>
       </div>
