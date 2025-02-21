@@ -1,23 +1,36 @@
 package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import java.util.Properties;
-
 @Configuration
+@PropertySource("classpath:application.properties")
 public class MailConfig {
 
+    @Value("${mail.trap.key.user}")
+    private String user;
+    @Value("${mail.trap.key.password}")
+    private String password;
     @Bean
     public JavaMailSender mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         // Imposta i valori per Mailtrap
         mailSender.setHost("sandbox.smtp.mailtrap.io");
         mailSender.setPort(2525);
-        mailSender.setUsername("d8fa39dfb8c174");
-        mailSender.setPassword("4825d478f84b82");
+        mailSender.setUsername(getUser());
+        mailSender.setPassword(getPassword());
         return mailSender;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

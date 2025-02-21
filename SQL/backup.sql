@@ -28,6 +28,21 @@ USE `MyCourseMvc`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
+DROP TABLE IF EXISTS `persistent_logins`;
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+
+create table persistent_logins
+(
+    username  varchar(64) not null,
+    series    varchar(64) not null
+        primary key,
+    token     varchar(64) not null,
+    last_used timestamp   not null
+)
+    engine = InnoDB;
+
 
 DROP TABLE IF EXISTS `register`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
