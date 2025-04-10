@@ -5,15 +5,19 @@
   Time: 07:48
   To change this template use File | Settings | File Templates.
 --%>
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<html>
+<head>
+    <%@ include file="/WEB-INF/views/common/header.jsp" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+    <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+</head>
+<body onload="image(false)">
 <!-- Alert Condizionale -->
 <br>
 <c:if test="${not empty message}">
     <div class="alert alert-danger" role="alert">
-        ${message}
+            ${message}
     </div>
 </c:if>
 <c:if test="${not empty message1}">
@@ -170,6 +174,18 @@
             $('#preview').attr('src', e.target.result);
         };
         reader.readAsDataURL(inputFile.files[0]);
+        image(true);
+    }
+</script>
+<script>
+    function image(visibility){
+        if(visibility == false){
+            document.getElementById("preview").style.visibility = "hidden";
+        }else{
+            document.getElementById("preview").style.visibility = "visible";
+        }
     }
 </script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %> <!-- This is the footer of the page -->
+</body>
+</html>
