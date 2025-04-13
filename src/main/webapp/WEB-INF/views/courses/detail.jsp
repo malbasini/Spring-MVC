@@ -15,30 +15,36 @@
             ${message}
     </div>
 </c:if>
+<!-- ID del corso -->
+<c:set var="courseId" value="${course.id}" />
 <br>
 <section class="course-info">
     <div class="row">
         <div class="col-md-9">
             <h1>Dettaglio</h1>
         </div>
+        <br>
         <div class="col-md-3 d-flex align-items-center">
-            <c:if test="${isOwner && isTeacher}">
-                <a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/courses/${course.id}/edit">Modifica</a>&nbsp;&nbsp;&nbsp;
-            </c:if>&nbsp;
-            <c:if test="${isStudent && not subscription}">
-                <c:if test="${provider eq 'paypal'}">
-                    <form action="${pageContext.request.contextPath}/paypal/${course.id}/pay" method="get">
-                        <button type="submit" class="btn btn-warning btn-bloc">Iscriviti</button>
+                <c:if test="${isOwner && isTeacher}">
+                    <a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/courses/${course.id}/edit">Modifica</a>&nbsp;&nbsp;&nbsp;
+                </c:if>&nbsp;
+                <c:if test="${isStudent && not subscription}">
+                    <form action="${pageContext.request.contextPath}/payment/paypal/${courseId}/pay" method="POST">
+                        <button type="submit">
+                            Paga con PayPal
+                        </button>
                     </form>
-                </c:if>
-                <c:if test="${provider eq 'stripe'}">
-                    <form action="${pageContext.request.contextPath}/stripe/${course.id}/checkout" method="get">
-                         <button type="submit" class="btn btn-warning btn-bloc">Iscriviti</button>
+                    <!-- Rotta per Stripe -->
+                    <form action="${pageContext.request.contextPath}/payment/stripe/${courseId}/pay" method="POST">
+                        <button type="submit">
+                            Paga con Stripe
+                        </button>
                     </form>
-                </c:if>
-            </c:if>&nbsp;
+                </c:if>&nbsp;
         </div>
     </div>
+    <br>
+    <br>
     <div class="row">
         <div class="col-md-9">
             ${course.description}
