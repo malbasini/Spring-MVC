@@ -24,10 +24,19 @@
             <h1>Dettaglio</h1>
         </div>
         <br>
-            <div class="col-md-3">
+                <div class="col-md-3">
+                <c:if test="${isStudent or isOwner}">
+                    <aside>
+                    <br>
                     <c:if test="${isOwner && isTeacher}">
-                        <a class="btn btn-primary btn-block" href="${pageContext.request.contextPath}/courses/${course.id}/edit">Modifica</a>&nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-warning outline" href="${pageContext.request.contextPath}/courses/${course.id}/edit">Modifica</a>&nbsp;&nbsp;&nbsp;
                     </c:if>&nbsp;
+                    <c:if test="${subscription}">
+                          <span class="alert alert-secondary btn-block">Sei iscritto al corso</span>
+                    </c:if>
+                    <c:if test="${isOwner}">
+                        <span class="alert alert-secondary btn-block">Sei l'autore del corso</span>
+                    </c:if>
                     <c:if test="${isStudent && not subscription}">
                         <div class="dropdown">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -40,6 +49,7 @@
                         </div>
                     </c:if>&nbsp;
                 </aside>
+                </c:if>&nbsp;
             </div>
     </div>
     <br>
