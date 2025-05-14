@@ -91,7 +91,7 @@ public class SecurityConfig {
     @Bean
     public PersistentTokenRepository persistentTokenRepository(DataSource dataSource) {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setDataSource((javax.sql.DataSource) dataSource);
+        jdbcTokenRepository.setDataSource(dataSource);
         //jdbcTokenRepository.setCreateTableOnStartup(true); // Da usare solo la prima volta
         return jdbcTokenRepository;
     }
