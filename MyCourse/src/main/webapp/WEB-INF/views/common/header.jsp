@@ -33,6 +33,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
             <a class="nav-link" href="${pageContext.request.contextPath}/courses">Catalogo corsi</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/role/${'ROLE_ADMIN'}">Ruoli</a>
             <a class="nav-link" href="https://mailtrap.io">Mail Trap</a>
         </ul>
         <!-- Link Login e Register a destra -->

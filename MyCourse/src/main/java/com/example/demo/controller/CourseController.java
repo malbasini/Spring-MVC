@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.SubscriptionRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.*;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import com.example.demo.entity.*;
+import com.example.demo.entity.Admin;
 import org.springframework.validation.BindingResult;
 import jakarta.validation.Valid;
 
@@ -58,6 +60,8 @@ public class CourseController {
     private SubscriptionRepository subscriptionRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private AdminRepository adminRepository;
     @Value("${upload.path:uploads}")
     private String uploadDir;
     // GET /courses -> listing di tutti i corsi con supporto a paginazione, ricerca e ordinamento
@@ -271,6 +275,7 @@ public class CourseController {
                 updatedCourse.setImagePath(imagePath);
                 return "redirect:/courses/" + updatedCourse.getId() + "/edit";
             }
+            this.insersciRole(updatedCourse);
             model.addAttribute("message", "Course updated successfully");
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
@@ -278,6 +283,27 @@ public class CourseController {
         }
         return "redirect:/courses";
 }
+
+    private void insersciRole(@Valid Course updatedCourse) {
+        Admin admin = new Admin();
+        admin.setFullname(updatedCourse.getAuthor());
+        admin.setEmail(updatedCourse.getEmail());
+        admin.setRole("ROLE_EDITOR");
+        admin.setUserId(updatedCourse.getUserOwner().getId());
+        admin.setRevoke(0);
+        adminRepository.save(admin);
+    }
+
+
+
+
+
+
+
+
+
+
+
     // POST /courses/{id}/delete -> cancella un corso
     @PostMapping("/{id}/delete")
     @PreAuthorize("hasAuthority('ROLE_TEACHER')")

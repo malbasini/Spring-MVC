@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,7 +53,7 @@ public class PayPalService {
         redirectUrls.setCancelUrl(cancelUrl);
         redirectUrls.setReturnUrl(returnUrl);
         payment.setRedirectUrls(redirectUrls);
-        payment.setTransactions(java.util.Arrays.asList(transaction));
+        payment.setTransactions(List.of(transaction));
         // 4) Crea il pagamento su PayPal
         Payment createdPayment = payment.create(apiContext);
         // 5) Estrai il link di approvazione
