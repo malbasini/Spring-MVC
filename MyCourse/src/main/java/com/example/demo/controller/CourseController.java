@@ -62,6 +62,8 @@ public class CourseController {
     private EmailService emailService;
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private AdminRepository adminRepository;
     @Value("${upload.path:uploads}")
     private String uploadDir;
     // GET /courses -> listing di tutti i corsi con supporto a paginazione, ricerca e ordinamento
@@ -285,13 +287,16 @@ public class CourseController {
 }
 
     private void insersciRole(@Valid Course updatedCourse) {
-        Admin admin = new Admin();
-        admin.setFullname(updatedCourse.getAuthor());
-        admin.setEmail(updatedCourse.getEmail());
-        admin.setRole("ROLE_EDITOR");
-        admin.setUserId(updatedCourse.getUserOwner().getId());
-        admin.setRevoke(0);
-        adminService.saveRole(admin);
+        Admin ad = adminRepository.findByEmail(updatedCourse.getEmail());
+        if(ad == null) {
+            Admin admin = new Admin();
+            admin.setFullname(updatedCourse.getUserOwner().getFullname());
+            admin.setEmail(updatedCourse.getEmail());
+            admin.setRole("ROLE_EDITOR");
+            admin.setUserId(updatedCourse.getUserOwner().getId());
+            admin.setRevoke(0);
+            adminService.saveRole(admin);
+        }
     }
 
 
