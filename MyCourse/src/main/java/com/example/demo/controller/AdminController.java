@@ -82,15 +82,6 @@ public class AdminController {
         }
         String username = authentication.getName();  // lo username loggato
         User user = userRepository.findByUsername(username);
-        Admin existingAdmin = adminRepository.findByEmailAndRole(email,role);
-        if(existingAdmin != null){
-            //SE IL RUOLO è STATO REVOCATO LO RIASSEGNO
-            if (existingAdmin.getRole().equals(role) && existingAdmin.getRevoke() == 1){
-                existingAdmin.setRevoke(0);
-                Integer savedAdmin = adminService.saveRole(existingAdmin);
-                return "redirect:/role/" + role + "?message=Ruolo riassegnato correttamente";
-            }
-        }
         Admin admin = new Admin();
         admin.setFullname(user.getFullname());
         admin.setEmail(email);

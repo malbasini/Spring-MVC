@@ -61,7 +61,7 @@ public class CourseController {
     @Autowired
     private EmailService emailService;
     @Autowired
-    private AdminRepository adminRepository;
+    private AdminService adminService;
     @Value("${upload.path:uploads}")
     private String uploadDir;
     // GET /courses -> listing di tutti i corsi con supporto a paginazione, ricerca e ordinamento
@@ -291,7 +291,7 @@ public class CourseController {
         admin.setRole("ROLE_EDITOR");
         admin.setUserId(updatedCourse.getUserOwner().getId());
         admin.setRevoke(0);
-        adminRepository.save(admin);
+        adminService.saveRole(admin);
     }
 
 
