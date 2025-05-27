@@ -46,8 +46,8 @@ public class CommonPayService {
         BigDecimal amount = course.getCurrentPriceAmount();
         String currency = "EUR";
         String description = course.getTitle();
-        String successUrl = "http://localhost:8080/spring-mvc-demo/payment/paypal/success";
-        String cancelUrl = "http://localhost:8080/spring-mvc-demo/payment/paypal/cancel";
+        String successUrl = "https://localhost:8483/spring-mvc-demo/payment/paypal/success";
+        String cancelUrl = "https://localhost:8483/spring-mvc-demo/payment/paypal/cancel";
         try {
             String approvalLink = payPalService.createPayment(
                     user,
