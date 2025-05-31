@@ -12,7 +12,7 @@
   <body>
   <hr/>
   <footer>
-    <%String s = "© 2025 SPRING MVC".substring(1,18);%>
+    <%String s = "© 2025 SPRING MVC GESTIONE CORSI ONLINE".substring(1,40);%>
     <%=s%>
   </footer>
   <!-- qui potresti caricare i file JS di Bootstrap, se serve -->
