@@ -26,16 +26,19 @@
 <section class="course-info">
     <div class="row">
         <div class="col-md-9">
-            <h1>${course.title}</h1>
+            <h1>${course.title}
+                <c:if test="${canEdit}">
+                    <a class="btn btn-outline-primary btn-sm" href="${pageContext.request.contextPath}/courses/${course.id}/edit"><i class="fas fa-pencil-alt"></i> Modifica</a>&nbsp;&nbsp;&nbsp;
+                </c:if>&nbsp;
+
+
+            </h1>
         </div>
         <br>
                 <div class="col-md-3">
                 <c:if test="${isStudent or canEdit or isAdmin}">
                     <aside>
                     <br>
-                    <c:if test="${canEdit}">
-                        <a class="btn btn-warning outline" href="${pageContext.request.contextPath}/courses/${course.id}/edit">Modifica</a>&nbsp;&nbsp;&nbsp;
-                    </c:if>&nbsp;
                     <c:if test="${subscription}">
                           <span class="alert alert-secondary btn-block">Sei iscritto al corso</span>
                     </c:if>
@@ -47,7 +50,7 @@
                      </c:if>
                     <c:if test="${isStudent && not subscription}">
                         <div class="dropdown">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Iscriviti
                                 </button>
                                 <ul class="dropdown-menu">
