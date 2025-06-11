@@ -39,11 +39,19 @@
         <!-- Link Login e Register a destra -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <sec:authorize access="isAuthenticated()">
-                <a class="nav-link" href="#" >Benvenuto <sec:authentication property="name" />!</a>&nbsb;&nbsp;&nbsp;
-                <a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a>
+                <li class="nav-item">
+                      <a class="nav-link" href="#" >Benvenuto <sec:authentication property="name" />!</a>
+                </li>
+            </sec:authorize>
+            <sec:authorize access="isAuthenticated()">
+                <li class="nav-item">
+                         <a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a>
+                </li>
             </sec:authorize>
             <sec:authorize access="!isAuthenticated()">
-                <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+                <li class="nav-item">
+                      <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+                </li>
             </sec:authorize>
             <sec:authorize access="!isAuthenticated()">
             <li class="nav-item">
