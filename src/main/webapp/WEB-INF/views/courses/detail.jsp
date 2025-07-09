@@ -95,7 +95,7 @@
                     </c:if>
                 </div>
                 <c:if test="${fn:contains(course.imagePath, 'uploads')}">
-                    <img src="${pageContext.request.contextPath}${course.imagePath}" alt="image" class="img-fluid course-image">
+                    <img src="${pageContext.request.contextPath}${course.imagePath}" alt="${course.imagePath}" class="img-fluid course-image">
                 </c:if>
                 <c:if test="${not fn:contains(course.imagePath, 'uploads')}">
                     <img src="${pageContext.request.contextPath}/static/images/${course.imagePath}" alt="image" class="img-fluid course-image">

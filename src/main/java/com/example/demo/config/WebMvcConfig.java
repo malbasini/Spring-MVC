@@ -18,9 +18,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("/uploads/**").addResourceLocations("file:/Users/malbasini/.SmartTomcatPro/80c1d80b-ee78-4484-bfd7-5ee0223c7d78/uploads/");
+        registry.addResourceHandler("/uploads/**").addResourceLocations("file:/Users/malbasini/.SmartTomcatPro/d085e65b-30ff-40ba-b50c-7eadb2d6a349/uploads/");
         registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static//css/");
-        registry.addResourceHandler("/images/**").addResourceLocations("classpath:/static//images/");
+        registry.addResourceHandler("/images/**").addResourceLocations("classpath:/static/images/");
 
 
 
