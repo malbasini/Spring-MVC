@@ -1,16 +1,8 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: malbasini
-  Date: 20/01/25
-  Time: 12:19
-  To change this template use File | Settings | File Templates.
---%>
 <html>
   <head>
     <title>Title</title>
   </head>
   <body>
-  <hr/>
   <footer>
     <%String s = "© 2025 SPRING MVC GESTIONE CORSI ONLINE".substring(1,40);%>
     <%=s%>

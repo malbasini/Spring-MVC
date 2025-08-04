@@ -353,6 +353,7 @@ public class CourseController {
         Course course = courseService.findById(courseId);
         String loggedUsername = principal.getName(); // es: "mariorossi"
         Subscription subscription = subscriptionRepository.findByCourse_Id(courseId);
+        model.addAttribute("sitetkey", captchaValidator.getSiteKey());
         if(subscription != null) {
             model.addAttribute("courses",course);
             return "courses/question";
@@ -363,8 +364,16 @@ public class CourseController {
     public String postQuestion(@PathVariable("courseId") Integer courseId,
                                @RequestParam("question") String question,
                                Principal principal,
+                               @RequestParam("g-recaptcha-response") String captchaResponse,
                                Model model) {
         Course course = courseService.findById(courseId);
+        boolean isCaptchaValid = captchaValidator.verifyCaptcha(captchaResponse);
+        if (!isCaptchaValid) {
+            model.addAttribute("error", "Captcha non valido. Riprova.");
+            model.addAttribute("course", course);
+            model.addAttribute("sitetkey", captchaValidator.getSiteKey());
+            return "courses/question";// Torna alla pagina del form
+        }
         String email = courseService.getEmailByCourseIdAndAuthor(courseId,course.getAuthor());
         if(question.isEmpty()||question.equals(null)) {
             model.addAttribute("message","Domanda obbligatoria");
