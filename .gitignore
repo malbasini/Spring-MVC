@@ -1,0 +1,4 @@
+.idea
+.smarttomcat
+spring-mvc-demo.iml
+src/main/resources/application.properties
