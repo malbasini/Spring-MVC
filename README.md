@@ -16,11 +16,3 @@ Accedi alla dashboard di stripe al seguente indirizzo, registrati se necessario:
 IMPLEMENTARE IL RECAPTCHA DI GOOGLE
 
 Accedi a Google reCAPTCHA Admin Console. Registra un nuovo sito, assicurati che la versione sia V2. Come dominio inserisci localhost, copia il sitekey e il secretkey dentro il file application.properties.
-# Spring-MVC
-# Spring-MVC
-# Spring-MVC
-# Spring-MVC
-# Spring-MVC
-# Spring-MVC
-# Spring-MVC
-# Spring-MVC
