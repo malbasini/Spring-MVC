@@ -84,7 +84,7 @@ rendendo il codice più semplice, leggibile e manutenibile.
 public interface CourseRepository extends JpaRepository<Course, Integer> {
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO Courses (Title) VALUES (:title)", nativeQuery = true)
+    @Query(value = "INSERT INTO Course (Title) VALUES (:title)", nativeQuery = true)
     int insertIgnore(@Param("title") String title);
     @Query("SELECT c FROM Course c WHERE c.title = :title")
     Course findByTitle(@Param("title") String title);
@@ -100,8 +100,12 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     boolean existsByTitle(String title);
     Course findCourseByAuthorAndId(String author, int courseId);
     Course findCourseById(Integer id);
-
     Course findById(int id);
+    // Metodo preferito: genera una EXISTS con join sull’owner
+    boolean existsByIdAndUserOwner_Username(int id, String username);
+    // (Opzionale) JPQL equivalente, se vuoi controllo esplicito
+    @Query("select (count(c) > 0) from Course c where c.id = :id and c.userOwner.username = :u")
+    boolean isOwner(@Param("id") int id, @Param("u") String username);
 }
 
 

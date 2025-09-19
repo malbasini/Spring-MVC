@@ -4,27 +4,19 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 import com.example.demo.entity.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.demo.repository.CourseJdbcRepository;
 
 @Service
 public class CourseServiceImpl implements CourseService {
     @Autowired
     private CourseRepository courseRepository;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private CourseJdbcRepository courseJdbcRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -39,17 +31,14 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     public int saveCourse(Course course) {
-        int courseId;
+        Course c = null;
         try {
-            courseId = courseJdbcRepository.saveCourse(course);
-            if (courseId == 0) {
-                throw new RuntimeException("Inserimento fallito");
-            }
+            c = courseRepository.save(course);
         }
         catch (Exception ex){
             throw ex;
         }
-        return courseId;
+        return c.getId();
     }
     @Override
     public Course getCourseByIdWithLessons(Integer id) {
@@ -85,22 +74,19 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.findTopByNewest(pageable);
     }
     public void updateCourse(Course course) {
-        int rowsAffected = courseJdbcRepository.updateCourse(course);
-        if (rowsAffected == 0) {
-            throw new RuntimeException("Aggiornamento fallito. Corso con ID " + course.getId() + " non trovato.");
-        }
+        courseRepository.save(course);
     }
     public void deleteCourse(int id) {
-        int rowsAffected = courseJdbcRepository.deleteCourse(id);
-        if (rowsAffected == 0) {
-            throw new RuntimeException("Eliminazione fallita. Corso con ID " + id + " non trovato.");
-        }
+        Course c = courseRepository.findCourseById(id);
+        courseRepository.delete(c);
+
     }
     public void updateImagePath(String image, int id) {
-        int rowsAffected = courseJdbcRepository.updateImagePath(image, id);
-        if (rowsAffected == 0) {
-            throw new RuntimeException("Aggiornamento dell'immagine fallito. Corso con ID " + id + " non trovato.");
+        Course c = courseRepository.findCourseById(id);
+        if (c != null) {
+            c.setImagePath(image);
         }
+        courseRepository.save(c);
     }
     @Override
     public User findByUsername(String username) {

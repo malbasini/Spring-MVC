@@ -52,8 +52,8 @@
                     <label>Operazione</label>
                     <hr>
                     <div>
-                        <button type="submit" formaction="${pageContext.request.contextPath}/assign" class="btn btn-success btn-md">Assegna</button>
-                        <button type="submit" class="btn btn-danger btn-md" formaction="${pageContext.request.contextPath}/revoke">Revoca</button>
+                        <button type="submit" formaction="${pageContext.request.contextPath}/admin/roles/assign" class="btn btn-success btn-md">Assegna</button>
+                        <button type="submit" class="btn btn-danger btn-md" formaction="${pageContext.request.contextPath}/admin/roles/revoke">Revoca</button>
                     </div>
                 </div>
     </div>
@@ -64,17 +64,21 @@
     <c:forEach var="role" items="${roles}">
         <li class="nav-item">
             <c:if test="${role.name eq 'ROLE_ADMIN'}">
-            <a class="nav-link ${role.name eq activeRole ? 'active' : ''}"
-               aria-current="page"
-               href="${pageContext.request.contextPath}/role/${role.name}">
-                    ${fn:replace(role.name, "ROLE_ADMIN", "AMMINISTRATORE")}
-            </a>
+                <a class="nav-link ${role.name eq activeRole ? 'active' : ''}"
+                   aria-current="page"
+                   href="<c:url value='/admin/roles'>
+                                    <c:param name='role' value='${role.name}'/>
+                         </c:url>">
+                        ${fn:replace(role.name, "ROLE_ADMIN", "AMMINISTRATORE")}
+                </a>
             </c:if>
             <c:if test="${role.name eq 'ROLE_EDITOR'}">
                 <a class="nav-link ${role.name eq activeRole ? 'active' : ''}"
                    aria-current="page"
-                   href="${pageContext.request.contextPath}/role/${role.name}">
-                        ${fn:replace(role.name, "ROLE_EDITOR", "DOCENTE")}
+                   href="<c:url value='/admin/roles'>
+                                    <c:param name='role' value='${role.name}'/>
+                         </c:url>">
+                         ${fn:replace(role.name, "ROLE_EDITOR", "DOCENTE")}
                 </a>
             </c:if>
         </li>

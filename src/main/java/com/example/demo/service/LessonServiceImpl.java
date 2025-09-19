@@ -1,10 +1,8 @@
 package com.example.demo.service;
-import com.example.demo.repository.LessonJdbcRepository;
 import com.example.demo.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 import com.example.demo.entity.Lesson;
 /*--## AI Assistant
@@ -151,8 +149,6 @@ per modifiche e test in contesti applicativi scalabili.
 public class LessonServiceImpl implements LessonService {
     @Autowired
     private LessonRepository lessonRepository;
-    @Autowired
-    private LessonJdbcRepository lessonJdbcRepository;
     @Override
     public List<Lesson> findByCourseId(Integer courseId) {
         return lessonRepository.findByCourseId(courseId);
@@ -169,29 +165,10 @@ public class LessonServiceImpl implements LessonService {
     public void deleteById(Integer id) {
         lessonRepository.deleteById(id);
     }
-    @Override
-    public void saveLesson(String title, int courseId) {
-        if (lessonRepository.existsByTitleAndCourseId(title, courseId)) {
-            throw new RuntimeException("Il titolo della lezione è già esistente.");
-        }
-        int rowsAffected = lessonJdbcRepository.saveLesson(title, courseId);
-        if (rowsAffected == 0) {
-            throw new RuntimeException("Inserimento fallito");
-        }
-    }
     public Lesson findByTitleAndCourseId(String title, int courseId) {
         return lessonRepository.findByTitleAndCourseId(title, courseId);
     }
     public void updateLesson(Lesson lesson) {
-        int rowsAffected = lessonJdbcRepository.updateLesson(lesson);
-        if (rowsAffected == 0) {
-            throw new RuntimeException("Aggiornamento fallito. Lesson con ID " + lesson.getId() + " non trovata.");
-        }
-    }
-    public void deleteLesson(int id) {
-        int rowsAffected = lessonJdbcRepository.deleteLesson(id);
-        if (rowsAffected == 0) {
-            throw new RuntimeException("Cancellazione fallita. Lesson con ID " + id + " non trovata.");
-        }
+        Lesson l = lessonRepository.save(lesson);
     }
 }

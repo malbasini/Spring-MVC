@@ -34,11 +34,11 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
             <a class="nav-link" href="${pageContext.request.contextPath}/courses">Catalogo corsi</a>
-            <sec:authorize access="hasRole('ADMIN')">
-             <!-- visibile solo a chi ha ROLE_ADMIN -->
-              <li class="nav-item">
-                  <a class="nav-link" href="${pageContext.request.contextPath}/role/ROLE_ADMIN">Ruoli</a>
-              </li>
+            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <!-- visibile solo a chi ha ROLE_ADMIN -->
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/admin/roles">Ruoli</a>
+                </li>
             </sec:authorize>
             <a class="nav-link" href="https://mailtrap.io">Mail Trap</a>
         </ul>
@@ -46,23 +46,23 @@
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <sec:authorize access="isAuthenticated()">
                 <li class="nav-item">
-                      <a class="nav-link" href="#" >Benvenuto <sec:authentication property="name" />!</a>
+                    <a class="nav-link" href="#" >Benvenuto <sec:authentication property="name" />!</a>
                 </li>
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
                 <li class="nav-item">
-                         <a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a>
                 </li>
             </sec:authorize>
             <sec:authorize access="!isAuthenticated()">
                 <li class="nav-item">
-                      <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
                 </li>
             </sec:authorize>
             <sec:authorize access="!isAuthenticated()">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/register">Registrati</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/register">Registrati</a>
+                </li>
             </sec:authorize>
         </ul>
     </div>

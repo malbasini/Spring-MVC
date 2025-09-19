@@ -5,7 +5,6 @@ import com.example.demo.entity.Course;
 import com.example.demo.entity.Subscription;
 import com.example.demo.entity.User;
 import com.example.demo.repository.CourseRepository;
-import com.example.demo.repository.SubscriptionJdbcRepository;
 import com.example.demo.repository.SubscriptionRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
     @Autowired
-    private SubscriptionJdbcRepository subscriptionJdbcRepository;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private CourseRepository courseRepository;
@@ -29,10 +26,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private ConfigPaymentType paymentType;
 
     public void subscriptionVote(int subscriptionId, int vote) {
-        int rowsAffected = subscriptionJdbcRepository.updateVote(subscriptionId, vote);
-        if (rowsAffected == 0) {
-            throw new RuntimeException("Aggiornamento fallito. Subscription con ID " + subscriptionId + " non trovato.");
+        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElse(null);
+        if (subscription != null) {
+            subscription.setVote(vote);
         }
+        subscriptionRepository.save(subscription);
     }
 
     public String getPaymentType() {
@@ -68,8 +66,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscription.setPaymentType(paymentType);
         subscription.setTransactionId(transactionId);
         subscription.setVote(1);
-        int subscriptionId = subscriptionJdbcRepository.saveSubscription(subscription);
-        Optional<Subscription> savedSubscription = subscriptionRepository.findById(subscriptionId);
+        Subscription s = subscriptionRepository.save(subscription);
+        Optional<Subscription> savedSubscription = subscriptionRepository.findById(s.getId());
         return savedSubscription.orElse(null);
     }
 }
