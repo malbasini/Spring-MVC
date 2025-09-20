@@ -1,20 +1,16 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.User;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import javax.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByUsername(String username);
-    boolean existsByEmail(String email);
-    boolean existsByUsername(String username);
     User findByEmail(String email);
     // --- gestione per ruolo ---
     long countByRoles_Name(String roleName);                    // quanti utenti hanno quel ruolo

@@ -6,7 +6,6 @@ import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CaptchaValidator;
 import com.example.demo.service.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,19 +17,23 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AuthController {
-    @Autowired
-    private CaptchaValidator captchaValidator;
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
-    @Autowired
-    private RoleRepository roleRepository;
 
+    private final CaptchaValidator captchaValidator;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
     private final RoleService roleService;
     private final UserRepository userRepository;
 
-    public AuthController(RoleService roleService, UserRepository userRepository) {
+    public AuthController(RoleService roleService,
+                          UserRepository userRepository,
+                          CaptchaValidator captchaValidator,
+                          BCryptPasswordEncoder passwordEncoder,
+                          RoleRepository roleRepository) {
         this.roleService = roleService;
         this.userRepository = userRepository;
+        this.captchaValidator = captchaValidator;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -128,14 +131,14 @@ public class AuthController {
             int userId = userRepository.findByEmail(email).getId();
             try {
                 roleService.assignSingleRole(userId, role);
-                model.addAttribute("message","Ruolo assegnato.");
+                model.addAttribute("message","Ruolo assegnato correttamente.");
                 return "security/register";
             } catch (Exception e) {
                 model.addAttribute("errore",e.getMessage());
                 return "security/register";
             }
         } catch (Exception e) {
-            ra.addFlashAttribute("errore",e.getMessage());
+            model.addAttribute("errore",e.getMessage());
             return "security/register";
         }
     }

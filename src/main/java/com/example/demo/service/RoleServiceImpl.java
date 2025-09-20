@@ -48,11 +48,9 @@ public class RoleServiceImpl implements RoleService {
 
         // flush automatico con @Transactional
     }
-
     public void removeRole(Integer userId, String roleName) {
         var user = userRepo.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Utente inesistente"));
-
         if (ROLE_ADMIN.equals(roleName)) {
             // vieta di rimuovere l’unico ADMIN
             userRepo.lockUsersByRoleName(ROLE_ADMIN);
@@ -61,30 +59,6 @@ public class RoleServiceImpl implements RoleService {
                 throw new IllegalStateException("Non puoi rimuovere l'unico amministratore.");
             }
         }
-
         user.getRoles().removeIf(r -> r.getName().equals(roleName));
-    }
-
-    /** Operazione atomica per spostare il cappello di ADMIN */
-    public void transferAdmin(Integer newAdminUserId) {
-        userRepo.lockUsersByRoleName(ROLE_ADMIN);
-        var newAdmin = userRepo.findById(newAdminUserId)
-                .orElseThrow(() -> new IllegalArgumentException("Utente inesistente"));
-
-        var adminRole = Optional.ofNullable(roleRepo.findByName(ROLE_ADMIN))
-                .orElseThrow(() -> new IllegalArgumentException("Ruolo ROLE_ADMIN mancante"));
-        var teacherRole = Optional.ofNullable(roleRepo.findByName(ROLE_EDITOR))
-                .orElseThrow(() -> new IllegalArgumentException("Ruolo ROLE_TEACHER mancante"));
-
-        // rimuovi ROLE_ADMIN da chiunque lo abbia
-        var admins = userRepo.findAllByRoles_Name(ROLE_ADMIN);
-        for (var u : admins) {
-            u.getRoles().removeIf(r -> ROLE_ADMIN.equals(r.getName()));
-            // opzionale: degradalo a TEACHER
-            u.getRoles().add(teacherRole);
-        }
-        // assegna al nuovo
-        newAdmin.getRoles().removeIf(r -> ROLE_ADMIN.equals(r.getName())); // idempotente
-        newAdmin.getRoles().add(adminRole);
     }
 }

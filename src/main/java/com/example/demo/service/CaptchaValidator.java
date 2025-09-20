@@ -2,13 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.config.RecaptchaConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +13,14 @@ import org.springframework.stereotype.Service;
 public class CaptchaValidator {
 
     private static final String GOOGLE_URL = "https://www.google.com/recaptcha/api/siteverify";
+    private final RecaptchaConfig recaptchaConfig;
 
-    @Autowired
-    private RecaptchaConfig recaptchaConfig;
+    public CaptchaValidator(RecaptchaConfig recaptchaConfig) {
+        this.recaptchaConfig = recaptchaConfig;
+    }
+
+
+
 
     public boolean verifyCaptcha(String responseToken) {
         try {

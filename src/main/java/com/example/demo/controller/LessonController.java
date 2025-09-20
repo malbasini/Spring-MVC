@@ -16,15 +16,23 @@ import com.example.demo.entity.*;
 @Controller
 @RequestMapping("/lessons")
 public class LessonController {
-    @Autowired
-    private CaptchaValidator captchaValidator;
-    @Autowired
-    private LessonService lessonService;
-    @Autowired
-    private CourseService courseService;
-    @Autowired
-    private LessonRepository lessonRepository;
 
+    private final CaptchaValidator captchaValidator;
+    private final LessonService lessonService;
+    private final CourseService courseService;
+    private final LessonRepository lessonRepository;
+
+
+    public LessonController(CaptchaValidator captchaValidator,
+                            LessonService lessonService,
+                            CourseService courseService,
+                            LessonRepository lessonRepository) {
+
+        this.captchaValidator = captchaValidator;
+        this.lessonService = lessonService;
+        this.courseService = courseService;
+        this.lessonRepository = lessonRepository;
+    }
     // GET /lessons/course/{courseId} -> visualizzazione delle lezioni di un corso
     @GetMapping("/course/{courseId}")
     public String listLessonsByCourse(@PathVariable("courseId") Integer courseId,

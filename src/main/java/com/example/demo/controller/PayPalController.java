@@ -13,9 +13,11 @@ import java.security.Principal;
 @RequestMapping("/payment/paypal")
 public class PayPalController {
 
-    @Autowired
-    private CommonPayService commonPayService;
+    private final CommonPayService commonPayService;
 
+    public PayPalController(CommonPayService commonPayService) {
+        this.commonPayService = commonPayService;
+    }
     @GetMapping("/{courseId}/pay")
     public String payWithPayPal(@PathVariable("courseId") Integer courseId,
                                 Principal principal,

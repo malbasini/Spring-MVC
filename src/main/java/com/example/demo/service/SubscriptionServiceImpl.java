@@ -16,14 +16,19 @@ import java.util.Optional;
 
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private ConfigPaymentType paymentType;
+
+    private final SubscriptionRepository subscriptionRepository;
+    private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
+
+    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository,
+                                   UserRepository userRepository,
+                                   CourseRepository courseRepository) {
+
+        this.subscriptionRepository = subscriptionRepository;
+        this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
+    }
 
     public void subscriptionVote(int subscriptionId, int vote) {
         Subscription subscription = subscriptionRepository.findById(subscriptionId).orElse(null);
@@ -31,10 +36,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             subscription.setVote(vote);
         }
         subscriptionRepository.save(subscription);
-    }
-
-    public String getPaymentType() {
-        return paymentType.getPaymentType();
     }
 
     /**

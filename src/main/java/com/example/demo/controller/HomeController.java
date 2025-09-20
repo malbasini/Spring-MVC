@@ -11,15 +11,17 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    @Autowired
-    private CourseService courseService;
+    private final CourseService courseService;
+
+    public HomeController(CourseService courseService) {
+        this.courseService = courseService;
+    }
 
     @GetMapping("/")
     public String showHomePage(Model model, org.springframework.security.core.Authentication authentication) {
         // Recupera i corsi
         List<Course> topRatedCourses = courseService.getTopRatedCourses();
         List<Course> newestCourses = courseService.getNewestCourses();
-
         // Aggiunge i dati al modello
         model.addAttribute("topRatedCourses", topRatedCourses);
         model.addAttribute("newestCourses", newestCourses);

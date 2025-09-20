@@ -149,47 +149,36 @@ public class Course {
     public void setCurrentPriceCurrency(String currentPriceCurrency) {
         this.currentPriceCurrency = currentPriceCurrency;
     }
-
     public String getRowVersion() {
         return rowVersion;
     }
-
     public void setRowVersion(String rowVersion) {
         this.rowVersion = rowVersion;
     }
-
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
-
     public int getFullStars() {
         return getRating().intValue();
     }
-
     public boolean isHasHalfStar() {
         return getRating().subtract(new BigDecimal(getFullStars())).compareTo(new BigDecimal("0.5")) >= 0;
     }
-
     public int getEmptyStars() {
         return 5 - getFullStars() - (isHasHalfStar() ? 1 : 0);
     }
-
     public List<Lesson> getLessons() {
         return lessons;
     }
-
     public void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
     }
-
     public User getUserOwner() {
         return userOwner;
     }
-
     public void setUserOwner(User userOwner) {
         this.userOwner = userOwner;
     }

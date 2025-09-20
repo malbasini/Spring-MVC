@@ -6,8 +6,6 @@ public interface LessonService {
     List<Lesson> findByCourseId(Integer courseId);
     Lesson findById(Integer id);
     Lesson save(Lesson lesson);
-    void deleteById(Integer id);
     Lesson findByTitleAndCourseId(String title, int courseId);
-    void updateLesson(Lesson lesson);
-
+    Lesson updateLesson(Lesson lesson);
 }
