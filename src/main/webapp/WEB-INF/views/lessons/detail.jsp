@@ -7,6 +7,12 @@
   Time: 22:12
   To change this template use File | Settings | File Templates.
 --%>
+<html>
+<head>
+    <title>Dettaglio lezione</title>
+</head>
+<body>
+<div class="container" style="flex: 1">
 <br>
 <section class="lesson-info">
     <div class="row">
@@ -23,4 +29,7 @@
         </div>
     </div>
 </section>
+</div>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
+</body>
+</html>

@@ -1,8 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="html" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <!-- Alert Condizionale -->
+<html>
+<head>
+    <title>Catalogo dei corsi</title>
+</head>
+<body>
+<div class="container" style="flex: 1">
 <br>
 <c:if test="${not empty message}">
     <div class="alert alert-success" role="alert">
@@ -135,4 +142,7 @@
         </li>
     </ul>
 </nav>
+</div>>
+</body>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
+</html>

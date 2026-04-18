@@ -6,6 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
+<html>
+<head>
+    <title>Pagamento avvenuto con successo</title>
+</head>
+<body>
+<div class="container" style="flex: 1">
 <br>
   <div class="alert alert-info" role="alert">
       Pagamento avvenuto con successo!
@@ -14,4 +20,8 @@
 <div class="col-md-12 mt-3">
     <a href="${pageContext.request.contextPath}/courses/course/${subscription.course.id}/detail"><i class="fas fa-arrow-left"></i> Torna al corso che hai acquistato</a>
 </div>
+</div>
+</body>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
+</html>
+
