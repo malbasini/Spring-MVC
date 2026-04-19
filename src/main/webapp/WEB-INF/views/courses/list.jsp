@@ -126,7 +126,9 @@
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-
+        <c:if test="${totalPages == 0}">
+            <c:set var="totalPages" value="1" />
+        </c:if>
         <c:forEach begin="0" end="${totalPages - 1}" var="i">
             <li class="page-item ${i == currentPage ? 'active' : ''}">
                 <a class="page-link" href="?page=${i}&size=10&title=${titleFilter}&sortBy=${sortBy}&sortDirection=${sortDirection}">
@@ -142,7 +144,7 @@
         </li>
     </ul>
 </nav>
-</div>>
+</div>
 </body>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </html>
